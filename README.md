@@ -4,6 +4,7 @@ A client-side React application for managing pedicure chair timers and manicure 
 
 ## Features
 
+### Core Features
 - **4 Pedicure Chairs** with countdown timers
 - **4 Manicure Techs** with ready status management
 - **Digital Queue** with FIFO ordering
@@ -11,6 +12,12 @@ A client-side React application for managing pedicure chair timers and manicure 
 - **Sound Alerts** when timers finish
 - **Persistent State** across page refreshes using localStorage
 - **Responsive Design** for desktop and tablet
+
+### New in v0.2.0
+- **Multi-language Support** - Switch between English and Vietnamese
+- **Modern UI Design** - Minimalist, professional interface with semantic colors
+- **Enhanced UX** - Better visual indicators, smooth animations, and intuitive interactions
+- **Improved Accessibility** - Better contrast, focus states, and touch targets
 
 ## Architecture
 
@@ -61,6 +68,10 @@ npm run preview
 ```
 
 ## Usage
+
+### Language Selection
+
+Click the **EN/VI** toggle in the top right corner to switch between English and Vietnamese. Your language preference is saved automatically.
 
 ### Pedicure Chairs
 
@@ -119,6 +130,7 @@ src/
 └── shared/              # Utilities
     ├── utils/           # time, id, classNames
     ├── constants/       # schema version, storage key
+    ├── i18n/            # Internationalization (NEW)
     └── types/           # branded types
 ```
 
@@ -126,9 +138,10 @@ src/
 
 - **React 18** with TypeScript
 - **Vite** for build tooling
-- **Tailwind CSS** for styling
+- **Tailwind CSS** for styling with custom design tokens
 - **Web Audio API** for sound alerts
 - **localStorage** for persistence
+- **i18n** for internationalization (English & Vietnamese)
 
 ## Future Enhancements
 

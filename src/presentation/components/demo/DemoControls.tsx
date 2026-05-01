@@ -1,9 +1,26 @@
 import React from 'react'
 import { useAppState, useAppDispatch } from '@/presentation/context/useAppDispatch'
+import { useLanguage } from '@/shared/i18n'
+import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card'
+import { Button } from '@/presentation/components/ui/button'
+import { Switch } from '@/presentation/components/ui/switch'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/presentation/components/ui/alert-dialog'
+import { RotateCcw } from 'lucide-react'
 
 export const DemoControls: React.FC = () => {
   const { settings } = useAppState()
   const dispatch = useAppDispatch()
+  const { t } = useLanguage()
 
   const handleToggleDemo = () => {
     dispatch({
@@ -13,37 +30,44 @@ export const DemoControls: React.FC = () => {
   }
 
   const handleResetAll = () => {
-    if (confirm('Reset all chairs, techs, and queue?')) {
-      dispatch({ type: 'RESET_ALL' })
-    }
+    dispatch({ type: 'RESET_ALL' })
   }
 
   return (
-    <div className="bg-white rounded-lg border-2 border-gray-300 p-6">
-      <h3 className="text-lg font-semibold mb-4">Demo Controls</h3>
-
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Demo Mode (40s/70s)</span>
-          <button
-            onClick={handleToggleDemo}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              settings.demoMode
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            {settings.demoMode ? 'ON' : 'OFF'}
-          </button>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t.demoControls}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+          <div className="space-y-0.5">
+            <div className="text-sm font-medium">{t.demoMode}</div>
+            <div className="text-xs text-muted-foreground">{t.demoModeDesc}</div>
+          </div>
+          <Switch checked={settings.demoMode} onCheckedChange={handleToggleDemo} />
         </div>
 
-        <button
-          onClick={handleResetAll}
-          className="w-full py-2 px-4 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
-        >
-          Reset All
-        </button>
-      </div>
-    </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="w-full">
+              <RotateCcw className="w-4 h-4 mr-2" />
+              {t.resetAll}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t.resetAll}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t.resetConfirm}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleResetAll}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardContent>
+    </Card>
   )
 }

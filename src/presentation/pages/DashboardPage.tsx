@@ -6,12 +6,14 @@ import { ChairCard } from '@/presentation/components/chair/ChairCard'
 import { TechCard } from '@/presentation/components/tech/TechCard'
 import { QueuePanel } from '@/presentation/components/queue/QueuePanel'
 import { DemoControls } from '@/presentation/components/demo/DemoControls'
+import { useLanguage } from '@/shared/i18n'
 
 export const DashboardPage: React.FC = () => {
   const { chairs, techs } = useAppState()
+  const { t } = useLanguage()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <TopBar />
       <SoundBanner />
 
@@ -19,7 +21,10 @@ export const DashboardPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <section>
-              <h2 className="text-xl font-bold mb-4">Pedicure Chairs</h2>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-1 h-8 bg-primary rounded-full" />
+                <h2 className="text-2xl font-bold">{t.pedicureChairs}</h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {chairs.map((chair) => (
                   <ChairCard key={chair.id} chair={chair} />
@@ -28,7 +33,10 @@ export const DashboardPage: React.FC = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold mb-4">Manicure Techs</h2>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-1 h-8 bg-green-500 rounded-full" />
+                <h2 className="text-2xl font-bold">{t.manicureTechs}</h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {techs.map((tech) => (
                   <TechCard key={tech.id} tech={tech} />

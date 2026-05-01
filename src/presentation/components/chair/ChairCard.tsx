@@ -4,7 +4,11 @@ import { useCountdown } from '@/presentation/hooks/useCountdown'
 import { useAppDispatch, useAppState } from '@/presentation/context/useAppDispatch'
 import { formatCountdown } from '@/shared/utils/time'
 import { getDurationMs } from '@/domain/value-objects/Duration'
-import { cx } from '@/shared/utils/classNames'
+import { useLanguage } from '@/shared/i18n'
+import { Card, CardContent, CardHeader, CardTitle } from '@/presentation/components/ui/card'
+import { Button } from '@/presentation/components/ui/button'
+import { Badge } from '@/presentation/components/ui/badge'
+import { Clock, Play, RotateCcw } from 'lucide-react'
 
 interface ChairCardProps {
   chair: Chair
@@ -14,6 +18,7 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
   const dispatch = useAppDispatch()
   const { settings } = useAppState()
   const { remainingMs } = useCountdown(chair.endsAt)
+  const { t } = useLanguage()
 
   const handleStart = () => {
     const durationMs = settings.demoMode
@@ -37,62 +42,68 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
     })
   }
 
-  const statusColor = {
-    idle: 'bg-gray-100 border-gray-300',
-    running: 'bg-blue-50 border-blue-400',
-    finished: 'bg-yellow-50 border-yellow-400',
-  }[chair.status]
-
-  const statusLabel = {
-    idle: 'Idle',
-    running: 'Running',
-    finished: 'Finished',
+  const statusConfig = {
+    idle: {
+      variant: 'secondary' as const,
+      label: t.idle,
+    },
+    running: {
+      variant: 'default' as const,
+      label: t.running,
+    },
+    finished: {
+      variant: 'destructive' as const,
+      label: t.finished,
+    },
   }[chair.status]
 
   return (
-    <div className={cx('border-2 rounded-lg p-6', statusColor)}>
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-semibold">Chair {chair.id.slice(-1)}</h3>
-        <span className="px-3 py-1 rounded-full text-sm font-medium bg-white border">
-          {statusLabel}
-        </span>
-      </div>
-
-      {chair.status === 'running' && (
-        <div className="text-center my-6">
-          <div className="text-5xl font-bold text-blue-600">
-            {formatCountdown(remainingMs)}
+    <Card className="transition-all hover:shadow-lg">
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <CardTitle className="text-lg">
+            {t.chair} {chair.id.slice(-1)}
+          </CardTitle>
+          <Badge variant={statusConfig.variant}>
+            {statusConfig.label}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <Clock className="w-12 h-12 mx-auto mb-2 text-muted-foreground" />
+            <div className="text-4xl font-bold tabular-nums">
+              {chair.status === 'idle' ? '--:--' : formatCountdown(remainingMs)}
+            </div>
+            <div className="text-sm text-muted-foreground mt-1">
+              {chair.status === 'idle' ? t.ready : t.remaining}
+            </div>
           </div>
         </div>
-      )}
 
-      {chair.status === 'finished' && (
-        <div className="text-center my-6">
-          <div className="text-3xl font-bold text-yellow-600">
-            Time's Up!
-          </div>
+        <div className="flex gap-2">
+          {chair.status === 'idle' && (
+            <Button onClick={handleStart} className="flex-1" size="lg">
+              <Play className="w-4 h-4 mr-2" />
+              {t.start}
+            </Button>
+          )}
+          {chair.status !== 'idle' && (
+            <Button onClick={handleReset} variant="outline" className="flex-1" size="lg">
+              <RotateCcw className="w-4 h-4 mr-2" />
+              {t.reset}
+            </Button>
+          )}
         </div>
-      )}
 
-      <div className="mt-4">
-        {chair.status === 'idle' && (
-          <button
-            onClick={handleStart}
-            className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-          >
-            Start Timer
-          </button>
+        {chair.techId && (
+          <div className="pt-2 border-t">
+            <div className="text-xs text-muted-foreground">{t.technician}</div>
+            <div className="text-sm font-medium">{chair.techId}</div>
+          </div>
         )}
-
-        {chair.status === 'finished' && (
-          <button
-            onClick={handleReset}
-            className="w-full py-3 px-4 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors"
-          >
-            Reset
-          </button>
-        )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

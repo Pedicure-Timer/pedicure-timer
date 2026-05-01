@@ -7,6 +7,7 @@ import { useSound } from './presentation/hooks/useSound'
 import { DashboardPage } from './presentation/pages/DashboardPage'
 import { shouldTransitionToFinished } from './domain/rules/chairRules'
 import { generateId } from './shared/utils/id'
+import { LanguageProvider } from './shared/i18n'
 
 const AppContent: React.FC = () => {
   const state = useAppState()
@@ -53,8 +54,10 @@ const AppContent: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <LanguageProvider>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </LanguageProvider>
   )
 }

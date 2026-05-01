@@ -11,9 +11,12 @@ export interface Translations {
   idle: string
   running: string
   finished: string
+  start: string
   startTimer: string
   reset: string
   timesUp: string
+  remaining: string
+  technician: string
 
   // Tech Card
   busy: string
@@ -56,9 +59,12 @@ export const translations: Record<Language, Translations> = {
     idle: 'Idle',
     running: 'Running',
     finished: 'Finished',
+    start: 'Start',
     startTimer: 'Start Timer',
     reset: 'Reset',
     timesUp: "Time's Up!",
+    remaining: 'Remaining',
+    technician: 'Technician',
 
     busy: 'Busy',
     ready: 'Ready',
@@ -94,9 +100,12 @@ export const translations: Record<Language, Translations> = {
     idle: 'Rảnh',
     running: 'Đang Chạy',
     finished: 'Hoàn Thành',
+    start: 'Bắt Đầu',
     startTimer: 'Bắt Đầu',
     reset: 'Đặt Lại',
     timesUp: 'Hết Giờ!',
+    remaining: 'Còn Lại',
+    technician: 'Nhân Viên',
 
     busy: 'Bận',
     ready: 'Sẵn Sàng',
