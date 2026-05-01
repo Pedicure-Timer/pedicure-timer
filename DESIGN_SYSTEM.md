@@ -1,232 +1,327 @@
-# Design System
+# Design System Documentation
 
-## Overview
-
-This application uses a minimalist, modern design system with semantic colors and consistent spacing.
-
-## Color Palette
+## 🎨 Color Palette
 
 ### Primary Colors
-
-#### Primary (Blue)
-- **Default**: `#2563eb` - Main actions, running states
-- **Hover**: `#1d4ed8` - Hover state
-- **Light**: `#dbeafe` - Background tint
-
-Usage: Start buttons, active indicators, primary actions
-
-#### Success (Green)
-- **Default**: `#10b981` - Ready states, positive actions
-- **Hover**: `#059669` - Hover state
-- **Light**: `#d1fae5` - Background tint
-
-Usage: Ready status, assign buttons, success states
-
-#### Warning (Orange)
-- **Default**: `#f59e0b` - Alerts, finished states
-- **Hover**: `#d97706` - Hover state
-- **Light**: `#fef3c7` - Background tint
-
-Usage: Timer finished, sound banner, warnings
-
-#### Danger (Red)
-- **Default**: `#ef4444` - Destructive actions
-- **Hover**: `#dc2626` - Hover state
-- **Light**: `#fee2e2` - Background tint
-
-Usage: Reset buttons, delete actions
+- **Primary Blue** `hsl(221, 83%, 53%)` - Main actions, active states, primary CTAs
+- **Accent Purple** `hsl(262, 52%, 47%)` - Queue highlights, secondary emphasis
+- **Success Green** `hsl(142, 71%, 45%)` - Ready states, positive actions
+- **Warning Amber** `hsl(38, 92%, 50%)` - Alerts, demo mode, attention states
+- **Destructive Red** `hsl(0, 72%, 51%)` - Dangerous actions, errors
 
 ### Neutral Colors
+- **Background** `hsl(240, 10%, 98%)` - Page background
+- **Card** `hsl(0, 0%, 100%)` - Card backgrounds
+- **Muted** `hsl(240, 5%, 96%)` - Subtle backgrounds
+- **Border** `hsl(240, 6%, 90%)` - Borders and dividers
 
-Gray scale from 50 (lightest) to 900 (darkest):
-- **50**: `#fafafa` - Page background
-- **100**: `#f5f5f5` - Card backgrounds
-- **200**: `#e5e5e5` - Borders
-- **300**: `#d4d4d4` - Dividers
-- **400**: `#a3a3a3` - Disabled text
-- **500**: `#737373` - Secondary text
-- **600**: `#525252` - Primary text
-- **700**: `#404040` - Headings
-- **800**: `#262626` - Dark text
-- **900**: `#171717` - Darkest text
+### Usage Guidelines
+- Use **Primary** for main actions (Start, Assign)
+- Use **Success** for ready/available states
+- Use **Warning** for time-sensitive alerts
+- Use **Destructive** only for irreversible actions
+- Use **Accent** for queue and secondary highlights
 
-## Typography
-
-### Font Family
-System font stack for optimal performance:
-```css
--apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
-```
+## 📐 Typography
 
 ### Font Sizes
-- **6xl**: 3.75rem (60px) - Timer countdown
-- **3xl**: 1.875rem (30px) - Time's up message
-- **2xl**: 1.5rem (24px) - Page title, section headers
-- **xl**: 1.25rem (20px) - Card titles
-- **lg**: 1.125rem (18px) - Subsection headers
-- **base**: 1rem (16px) - Body text
-- **sm**: 0.875rem (14px) - Secondary text
-- **xs**: 0.75rem (12px) - Labels, badges
+- **Display**: 2xl (24px) - Section headers
+- **Title**: xl (20px) - Card titles
+- **Body**: base (16px) - Default text
+- **Small**: sm (14px) - Secondary text
+- **Tiny**: xs (12px) - Labels, badges
 
 ### Font Weights
-- **bold**: 700 - Headings, important text
-- **semibold**: 600 - Subheadings, emphasis
-- **medium**: 500 - Buttons, labels
-- **normal**: 400 - Body text
+- **Bold**: 700 - Headers, important numbers
+- **Semibold**: 600 - Subheaders, card titles
+- **Medium**: 500 - Buttons, labels
+- **Regular**: 400 - Body text
 
-## Spacing
+## 🔲 Spacing System
 
-Consistent spacing scale (in rem):
-- **1**: 0.25rem (4px)
-- **2**: 0.5rem (8px)
-- **3**: 0.75rem (12px)
-- **4**: 1rem (16px)
-- **6**: 1.5rem (24px)
-- **8**: 2rem (32px)
-- **12**: 3rem (48px)
+Based on 4px grid:
+- **xs**: 0.5rem (8px)
+- **sm**: 0.75rem (12px)
+- **md**: 1rem (16px)
+- **lg**: 1.5rem (24px)
+- **xl**: 2rem (32px)
 
-## Border Radius
+### Component Spacing
+- Card padding: 24px (p-6)
+- Button padding: 16px horizontal (px-4)
+- Section gaps: 32px (gap-8)
+- Element gaps: 16px (gap-4)
 
-- **sm**: 0.375rem (6px) - Small elements
-- **md**: 0.5rem (8px) - Buttons, inputs
-- **lg**: 0.75rem (12px) - Cards
-- **xl**: 1rem (16px) - Large cards
-- **full**: 9999px - Pills, badges
-
-## Shadows
-
-Subtle elevation system:
-- **sm**: `0 1px 2px 0 rgb(0 0 0 / 0.05)` - Subtle lift
-- **md**: `0 4px 6px -1px rgb(0 0 0 / 0.1)` - Cards
-- **lg**: `0 10px 15px -3px rgb(0 0 0 / 0.1)` - Modals
-- **xl**: `0 20px 25px -5px rgb(0 0 0 / 0.1)` - Popovers
-
-## Transitions
-
-- **fast**: 150ms - Hover effects
-- **base**: 200ms - Standard transitions
-- **slow**: 300ms - Complex animations
-
-Easing: `cubic-bezier(0.4, 0, 0.2, 1)` - Smooth, natural motion
-
-## Components
-
-### Buttons
-
-#### Primary Button
-```tsx
-className="px-6 py-3 bg-primary text-white rounded-lg font-medium 
-           hover:bg-primary-hover transition-all shadow-sm 
-           hover:shadow-md active:scale-95"
-```
-
-#### Success Button
-```tsx
-className="px-6 py-3 bg-success text-white rounded-lg font-medium 
-           hover:bg-success-hover transition-all shadow-sm 
-           hover:shadow-md active:scale-95"
-```
-
-#### Danger Button
-```tsx
-className="px-6 py-3 bg-danger text-white rounded-lg font-medium 
-           hover:bg-danger-hover transition-all shadow-sm 
-           hover:shadow-md active:scale-95"
-```
+## 🎯 Component Patterns
 
 ### Cards
-
-#### Standard Card
 ```tsx
-className="bg-white rounded-xl border border-neutral-200 p-6 
-           shadow-sm hover:shadow-md transition-all"
+<Card className="shadow-elevated">
+  <CardContent className="p-6">
+    {/* Content */}
+  </CardContent>
+</Card>
 ```
 
-#### Status Card (with semantic color)
-```tsx
-className="rounded-xl border-2 p-6 transition-all duration-200 
-           shadow-sm hover:shadow-md bg-{color}-light border-{color}"
-```
+**States:**
+- Default: `border-border`
+- Active: `border-primary/30 bg-primary/[0.02]`
+- Warning: `border-warning/30 bg-warning/[0.02]`
+- Success: `border-success/30 bg-success/[0.02]`
 
-### Inputs
+### Buttons
+**Variants:**
+- `default` - Primary actions
+- `outline` - Secondary actions
+- `destructive` - Dangerous actions
+- `ghost` - Tertiary actions
 
-```tsx
-className="px-4 py-2.5 border border-neutral-300 rounded-lg 
-           focus:outline-none focus:ring-2 focus:ring-primary 
-           focus:border-transparent transition-all"
-```
+**Sizes:**
+- `sm` - 36px height
+- `default` - 40px height
+- `lg` - 44px height
 
 ### Badges
+**Variants:**
+- `default` - Primary status
+- `secondary` - Neutral status
+- `success` - Positive status
+- `warning` - Alert status
+- `destructive` - Error status
 
+## 🎭 Visual Hierarchy
+
+### Level 1: Page Header
+- Sticky top bar
+- Logo + title
+- Stats display
+- Language switcher
+
+### Level 2: Section Headers
+- Icon + title
+- Subtitle description
+- Clear visual separation
+
+### Level 3: Cards
+- Rounded corners (12px)
+- Subtle shadows
+- Border states for status
+- Hover effects
+
+### Level 4: Content
+- Clear typography hierarchy
+- Consistent spacing
+- Icon + text combinations
+
+## 🎬 Animations & Transitions
+
+### Timing
+- **Fast**: 150ms - Hover states
+- **Normal**: 200ms - Default transitions
+- **Slow**: 300ms - Complex animations
+
+### Effects
+- **Hover**: Scale 0.98, shadow elevation
+- **Active**: Scale 0.98
+- **Focus**: Ring 2px primary
+- **Pulse**: Opacity animation for alerts
+
+### Usage
 ```tsx
-className="px-3 py-1 rounded-full text-xs font-semibold 
-           uppercase tracking-wide bg-white border-2 
-           border-{color} text-{color}"
+className="transition-all duration-200 hover:shadow-elevated active:scale-[0.98]"
 ```
 
-## Status Colors
+## 🎨 Status Colors
 
 ### Chair Status
-- **Idle**: Neutral (gray)
-- **Running**: Primary (blue)
-- **Finished**: Warning (orange)
+- **Idle**: Secondary (gray) - Available
+- **Running**: Primary (blue) - Active timer
+- **Finished**: Warning (amber) - Needs attention
 
 ### Tech Status
-- **Busy**: Neutral (gray)
-- **Ready**: Success (green)
-- **Assigned**: Primary (blue)
+- **Busy**: Secondary (gray) - Unavailable
+- **Ready**: Success (green) - Available
+- **Assigned**: Accent (purple) - Working
 
-## Accessibility
+### Queue Status
+- **Waiting**: Muted background
+- **Next**: Primary highlight with badge
+
+## 📱 Responsive Design
+
+### Breakpoints
+- **Mobile**: < 768px - Single column
+- **Tablet**: 768px - 1024px - 2 columns
+- **Desktop**: > 1024px - 3 columns
+
+### Mobile Optimizations
+- Stack sections vertically
+- Full-width buttons
+- Larger touch targets (44px min)
+- Hide secondary stats on small screens
+
+## ♿ Accessibility
 
 ### Focus States
-All interactive elements have visible focus states:
-```css
-focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2
-```
+- 2px ring with primary color
+- 2px offset for visibility
+- Clear keyboard navigation
 
 ### Color Contrast
-All text meets WCAG AA standards:
-- Normal text: 4.5:1 minimum
-- Large text: 3:1 minimum
+- All text meets WCAG AA standards
+- Minimum 4.5:1 for normal text
+- Minimum 3:1 for large text
 
-### Touch Targets
-Minimum 44x44px for all interactive elements on mobile.
+### Interactive Elements
+- Minimum 44x44px touch targets
+- Clear hover/focus states
+- Descriptive labels
+- Icon + text combinations
 
-## Usage Examples
+## 🎯 UX Guidelines
 
-### Section Header
-```tsx
-<div className="flex items-center gap-3 mb-6">
-  <div className="w-1 h-8 bg-primary rounded-full" />
-  <h2 className="text-2xl font-bold text-neutral-900">
-    {t.pedicureChairs}
-  </h2>
-</div>
+### Feedback
+- Immediate visual feedback on actions
+- Loading states for async operations
+- Success/error messages
+- Pulse animation for urgent items
+
+### Clarity
+- Clear action buttons with icons
+- Status badges always visible
+- Consistent terminology
+- Helpful empty states
+
+### Efficiency
+- Quick actions accessible
+- Keyboard shortcuts support
+- Minimal clicks to complete tasks
+- Smart defaults
+
+## 🔧 Implementation
+
+### CSS Variables
+All colors use CSS variables for easy theming:
+```css
+--primary: 221 83% 53%;
+--success: 142 71% 45%;
+--warning: 38 92% 50%;
 ```
 
-### Status Indicator
-```tsx
-<div className="flex items-center gap-2">
-  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-  <span className="text-neutral-600">{t.activeChairs}:</span>
-  <span className="font-semibold text-neutral-900">{count}</span>
-</div>
+### Utility Classes
+```css
+.shadow-elevated - Enhanced shadow
+.transition-smooth - Smooth transitions
+.focus-ring - Standard focus ring
 ```
 
-### Queue Item
+### Component Structure
+```
+Card
+├── CardHeader (optional)
+│   └── CardTitle
+├── CardContent
+│   ├── Status indicator
+│   ├── Main content
+│   └── Actions
+└── CardFooter (optional)
+```
+
+## 📊 Component Inventory
+
+### Layout
+- TopBar - Navigation header
+- SoundBanner - Alert banner
+- DashboardPage - Main layout
+
+### Features
+- ChairCard - Timer display
+- TechCard - Staff status
+- QueuePanel - Customer queue
+- DemoControls - Settings
+
+### UI Primitives
+- Button - Actions
+- Card - Containers
+- Badge - Status indicators
+- Switch - Toggles
+- AlertDialog - Confirmations
+
+## 🎨 Design Principles
+
+1. **Clarity over Cleverness** - Clear, obvious UI over fancy effects
+2. **Consistency** - Same patterns throughout
+3. **Feedback** - Always show what's happening
+4. **Efficiency** - Minimize steps to complete tasks
+5. **Accessibility** - Usable by everyone
+6. **Professional** - Clean, modern, trustworthy
+
+## 🚀 Best Practices
+
+### Do's
+✅ Use semantic colors (success for ready, warning for alerts)
+✅ Maintain consistent spacing (4px grid)
+✅ Provide clear visual feedback
+✅ Use icons with text labels
+✅ Keep animations subtle
+✅ Test with keyboard navigation
+
+### Don'ts
+❌ Don't use gradients excessively
+❌ Don't mix different border radius values
+❌ Don't use colors without meaning
+❌ Don't hide important actions
+❌ Don't use animation for decoration only
+❌ Don't sacrifice clarity for aesthetics
+
+## 📝 Quick Reference
+
+### Common Patterns
+
+**Section Header:**
 ```tsx
-<div className="flex items-center justify-between p-3 
-                bg-neutral-50 rounded-lg border border-neutral-200 
-                hover:border-neutral-300 transition-all">
-  <div className="flex items-center gap-3">
-    <span className="flex items-center justify-center w-7 h-7 
-                     rounded-full bg-primary text-white text-xs font-bold">
-      {index + 1}
-    </span>
-    <span className="font-medium text-neutral-900">
-      {customerName}
-    </span>
+<div className="flex items-center gap-3">
+  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+    <Icon className="h-5 w-5 text-primary" />
+  </div>
+  <div>
+    <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+    <p className="text-sm text-muted-foreground">{subtitle}</p>
   </div>
 </div>
 ```
+
+**Status Badge:**
+```tsx
+<Badge variant="default" className="font-medium">
+  {status}
+</Badge>
+```
+
+**Action Button:**
+```tsx
+<Button className="w-full h-11 shadow-sm" size="lg">
+  <Icon className="w-4 h-4 mr-2" />
+  {label}
+</Button>
+```
+
+**Empty State:**
+```tsx
+<div className="flex flex-col items-center justify-center py-12">
+  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/50 mb-4">
+    <Icon className="w-8 h-8 text-muted-foreground" />
+  </div>
+  <p className="text-sm font-medium text-muted-foreground">{message}</p>
+</div>
+```
+
+## 🎓 User Guide Integration
+
+The dashboard includes a Quick Guide panel with:
+1. Step-by-step instructions
+2. Numbered list format
+3. Clear, concise language
+4. Visual hierarchy with primary color accents
+
+This helps new users understand the workflow without external documentation.

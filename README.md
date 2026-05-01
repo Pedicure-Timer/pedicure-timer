@@ -1,156 +1,231 @@
 # Pedicure Timer & Digital Queue Demo
 
-A client-side React application for managing pedicure chair timers and manicure queue following Clean Architecture principles.
+A modern, professional React application for managing pedicure chair timers and manicure queue with a beautiful, minimalist UI built with shadcn/ui.
 
-## Features
+## ✨ Features
 
 ### Core Features
-- **4 Pedicure Chairs** with countdown timers
-- **4 Manicure Techs** with ready status management
-- **Digital Queue** with FIFO ordering
+- **4 Pedicure Chairs** with countdown timers and real-time status
+- **4 Manicure Techs** with availability management
+- **Digital Queue** with FIFO ordering and smart assignment
 - **Demo Mode** (40s/70s timers) for quick testing
 - **Sound Alerts** when timers finish
 - **Persistent State** across page refreshes using localStorage
-- **Responsive Design** for desktop and tablet
+- **Fully Responsive** design for desktop, tablet, and mobile
 
-### New in v0.2.0
-- **Multi-language Support** - Switch between English and Vietnamese
-- **Modern UI Design** - Minimalist, professional interface with semantic colors
-- **Enhanced UX** - Better visual indicators, smooth animations, and intuitive interactions
-- **Improved Accessibility** - Better contrast, focus states, and touch targets
+### UI/UX Highlights
+- **Modern Design System** - Professional, minimalist interface with shadcn/ui
+- **Semantic Colors** - Intuitive color coding for different states
+- **Smooth Animations** - Subtle transitions and micro-interactions
+- **Visual Feedback** - Clear status indicators and hover effects
+- **Accessibility First** - WCAG AA compliant with keyboard navigation
+- **Multi-language** - Switch between English and Vietnamese
+- **Quick Guide** - Built-in user instructions
 
-## Architecture
+## 🎨 Design System
 
-Built following Clean Architecture with:
-- **Domain Layer**: Pure business logic (entities, value objects, rules)
-- **Application Layer**: State management with useReducer
-- **Infrastructure Layer**: Adapters for storage, audio, timer
-- **Presentation Layer**: React components and hooks
+### Color Palette
+- **Primary Blue** - Main actions and active states
+- **Success Green** - Ready and available states
+- **Warning Amber** - Alerts and finished states
+- **Accent Purple** - Queue highlights
+- **Neutral Gray** - Backgrounds and borders
 
-Key architectural decisions:
-- Timer based on absolute timestamps (endsAt), not countdown
-- Idempotent reducer to prevent duplicate actions
-- State persisted on every change + visibilitychange event
-- Sound requires user gesture (Enable Sound button)
+### Components
+Built with [shadcn/ui](https://ui.shadcn.com/) for consistency:
+- Button (multiple variants)
+- Card (with header, content, footer)
+- Badge (status indicators)
+- Switch (toggles)
+- AlertDialog (confirmations)
 
-## Getting Started
+See [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) for complete documentation.
+
+## 🏗️ Architecture
+
+Built following Clean Architecture principles:
+
+```
+┌─────────────────────────────────────────┐
+│         Presentation Layer              │
+│  (React Components, Hooks, Context)     │
+├─────────────────────────────────────────┤
+│        Application Layer                │
+│   (State Management, Actions, Reducer)  │
+├─────────────────────────────────────────┤
+│          Domain Layer                   │
+│  (Entities, Value Objects, Rules)       │
+├─────────────────────────────────────────┤
+│       Infrastructure Layer              │
+│  (Storage, Audio, External Adapters)    │
+└─────────────────────────────────────────┘
+```
+
+### Key Architectural Decisions
+- **Absolute Timestamps**: Timers use `endsAt` instead of countdown
+- **Idempotent Reducer**: Prevents duplicate actions
+- **Immutable State**: All state updates create new objects
+- **Event-Driven**: State persisted on every change
+- **User Gesture Required**: Sound needs explicit user activation
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js 18+ and npm
 
 ### Installation
-
 ```bash
 npm install
 ```
 
 ### Development
-
 ```bash
 npm run dev
 ```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [http://localhost:5173](http://localhost:5173)
 
 ### Build
-
 ```bash
 npm run build
 ```
 
-The production build will be in the `dist/` folder.
-
 ### Preview Production Build
-
 ```bash
 npm run preview
 ```
 
-## Usage
+## 📖 Usage
+
+See [USER_GUIDE.md](./USER_GUIDE.md) for detailed instructions.
+
+### Quick Start
+
+1. **Start a Chair Timer**
+   - Click **Start** on any idle chair
+   - Timer begins countdown
+   - Status changes to Running (blue)
+
+2. **Add Customers to Queue**
+   - Enter customer name
+   - Click **Add** button
+   - Customer appears in queue with position
+
+3. **Assign to Technician**
+   - Tech clicks **I'm Ready**
+   - Click **Assign to [Tech Name]**
+   - Customer is assigned
+
+4. **Complete Session**
+   - Timer finishes automatically
+   - Sound alert plays
+   - Click **Reset** to make chair available
 
 ### Language Selection
+Click **EN/VI** toggle in top right to switch languages. Preference is saved automatically.
 
-Click the **EN/VI** toggle in the top right corner to switch between English and Vietnamese. Your language preference is saved automatically.
+### Demo Mode
+Toggle **Demo Mode** for shorter timers (40s/70s) perfect for testing and demonstrations.
 
-### Pedicure Chairs
-
-1. Click **Start Timer** on any idle chair
-2. Timer counts down from 40s (demo mode) or 40 minutes (full mode)
-3. When finished, customer is automatically added to queue
-4. Click **Reset** to return chair to idle state
-
-### Manicure Techs
-
-1. Click **I'm Ready** when tech is available
-2. Tech status changes to "Ready"
-3. When assigned to customer, status changes to "Assigned"
-
-### Queue Management
-
-1. Add customers manually using the input field
-2. Customers from finished chairs are added automatically
-3. Click **Assign Next Customer** when a tech is ready
-4. Queue follows FIFO order with tie-breaker by sequence number
-
-### Demo Controls
-
-- **Demo Mode Toggle**: Switch between 40s/70s (demo) and 40min/30min (full) timers
-- **Reset All**: Clear all chairs, techs, and queue to initial state
-- **Enable Sound**: Activate audio alerts (requires user interaction)
-
-## Testing Notes
-
-- **Do NOT test in incognito/private mode** - localStorage is cleared when tab closes
-- State persists across page refreshes in normal browsing mode
-- Multiple tabs on same device will share state via localStorage
-- Different devices will NOT sync (this is a single-device demo)
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── domain/              # Pure business logic
-│   ├── entities/        # Chair, Tech, QueueEntry
-│   ├── value-objects/   # Duration, TimerSnapshot
-│   └── rules/           # Pure functions for business rules
-├── application/         # State management
-│   ├── state/           # AppState types
-│   ├── actions/         # Action types
-│   └── reducer/         # Reducer slices
-├── infrastructure/      # External adapters
-│   ├── persistence/     # LocalStorageAdapter
-│   ├── audio/           # WebAudioAdapter
-│   └── timer/           # Timer engine (placeholder)
-├── presentation/        # React UI
-│   ├── context/         # AppContext, hooks
-│   ├── hooks/           # useCountdown, usePersistence, etc.
-│   ├── components/      # UI components
-│   └── pages/           # DashboardPage
-└── shared/              # Utilities
-    ├── utils/           # time, id, classNames
-    ├── constants/       # schema version, storage key
-    ├── i18n/            # Internationalization (NEW)
-    └── types/           # branded types
+├── domain/                    # Pure business logic
+│   ├── entities/             # Chair, Tech, QueueEntry
+│   ├── value-objects/        # Duration, TimerSnapshot
+│   └── rules/                # Business rules
+├── application/              # State management
+│   ├── state/                # AppState types
+│   ├── actions/              # Action types
+│   └── reducer/              # Reducer slices
+├── infrastructure/           # External adapters
+│   ├── persistence/          # LocalStorageAdapter
+│   ├── audio/                # WebAudioAdapter
+│   └── timer/                # Timer engine
+├── presentation/             # React UI
+│   ├── context/              # AppContext, hooks
+│   ├── hooks/                # Custom hooks
+│   ├── components/           # UI components
+│   │   ├── ui/              # shadcn/ui primitives
+│   │   ├── chair/           # ChairCard
+│   │   ├── tech/            # TechCard
+│   │   ├── queue/           # QueuePanel
+│   │   ├── demo/            # DemoControls
+│   │   └── layout/          # TopBar, SoundBanner
+│   └── pages/                # DashboardPage
+└── shared/                   # Utilities
+    ├── utils/                # Helpers
+    ├── constants/            # Constants
+    ├── i18n/                 # Internationalization
+    └── types/                # TypeScript types
 ```
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **React 18** with TypeScript
-- **Vite** for build tooling
-- **Tailwind CSS** for styling with custom design tokens
-- **Web Audio API** for sound alerts
-- **localStorage** for persistence
-- **i18n** for internationalization (English & Vietnamese)
+- **React 18** - UI library with TypeScript
+- **Vite** - Fast build tooling
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - High-quality component library
+- **Radix UI** - Accessible primitives
+- **Lucide React** - Beautiful icons
+- **Web Audio API** - Sound alerts
+- **localStorage** - Client-side persistence
 
-## Future Enhancements
+## 📱 Responsive Design
 
-- Shelly Plug integration for hardware chair detection
-- Backend API for multi-device sync
-- Authentication and multi-salon support
-- Analytics and reporting
-- Mobile app
+- **Desktop** (>1024px): 3-column layout
+- **Tablet** (768-1024px): 2-column layout
+- **Mobile** (<768px): Single column, stacked
 
-## License
+All touch targets are minimum 44x44px for mobile usability.
+
+## ♿ Accessibility
+
+- WCAG AA compliant color contrast
+- Keyboard navigation support
+- Focus indicators on all interactive elements
+- Screen reader friendly
+- Semantic HTML structure
+
+## 🧪 Testing Notes
+
+- **Do NOT test in incognito/private mode** - localStorage is cleared when tab closes
+- State persists across page refreshes in normal browsing mode
+- Multiple tabs on same device share state via localStorage
+- Different devices do NOT sync (single-device demo)
+
+## 📚 Documentation
+
+- [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) - Complete design system documentation
+- [USER_GUIDE.md](./USER_GUIDE.md) - Detailed user instructions
+- [SHADCN_MIGRATION.md](./SHADCN_MIGRATION.md) - shadcn/ui migration notes
+- [CHANGELOG.md](./CHANGELOG.md) - Version history
+
+## 🔮 Future Enhancements
+
+- [ ] Shelly Plug integration for hardware chair detection
+- [ ] Backend API for multi-device sync
+- [ ] Authentication and multi-salon support
+- [ ] Analytics and reporting dashboard
+- [ ] Mobile app (React Native)
+- [ ] Dark mode support
+- [ ] Print receipts
+- [ ] Customer notifications (SMS/Email)
+
+## 🤝 Contributing
+
+This is a demo project. For production use, consider:
+- Adding comprehensive test coverage
+- Implementing error boundaries
+- Adding logging and monitoring
+- Setting up CI/CD pipeline
+- Adding backend API
+- Implementing authentication
+
+## 📄 License
 
 ISC
+
+---
+
+**Built with ❤️ using React, TypeScript, and shadcn/ui**

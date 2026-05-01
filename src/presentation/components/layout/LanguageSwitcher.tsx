@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLanguage, Language } from '@/shared/i18n'
-import { Button } from '@/presentation/components/ui/button'
+import { Globe } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 
 export const LanguageSwitcher: React.FC = () => {
@@ -11,29 +11,32 @@ export const LanguageSwitcher: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-      <Button
-        onClick={() => handleChange('en')}
-        variant={language === 'en' ? 'default' : 'ghost'}
-        size="sm"
-        className={cn(
-          "text-xs font-medium",
-          language === 'en' ? '' : 'hover:bg-background'
-        )}
-      >
-        EN
-      </Button>
-      <Button
-        onClick={() => handleChange('vi')}
-        variant={language === 'vi' ? 'default' : 'ghost'}
-        size="sm"
-        className={cn(
-          "text-xs font-medium",
-          language === 'vi' ? '' : 'hover:bg-background'
-        )}
-      >
-        VI
-      </Button>
+    <div className="flex items-center gap-2">
+      <Globe className="h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+        <button
+          onClick={() => handleChange('en')}
+          className={cn(
+            "px-3 py-1.5 text-xs font-medium rounded-md transition-all",
+            language === 'en'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          EN
+        </button>
+        <button
+          onClick={() => handleChange('vi')}
+          className={cn(
+            "px-3 py-1.5 text-xs font-medium rounded-md transition-all",
+            language === 'vi'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          VI
+        </button>
+      </div>
     </div>
   )
 }
