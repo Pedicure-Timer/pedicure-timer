@@ -94,6 +94,34 @@ npm run build
 npm run preview
 ```
 
+## 🚀 Deploy to Vercel
+
+### Vercel Checklist
+
+1. Push the latest code to your Git provider.
+2. In Vercel, choose **New Project** and import this repository.
+3. Select the **Vite** preset.
+4. Use these build settings:
+    - **Root Directory**: `./`
+    - **Build Command**: `npm run build`
+    - **Output Directory**: `dist`
+    - **Install Command**: `npm install`
+5. Deploy the project.
+
+### Do You Need `vercel.json`?
+
+For the current app, **no**. This repo is a single-page Vite app and does not use React Router or nested client routes, so Vercel can serve it with the default static build settings.
+
+Add a `vercel.json` only if you later introduce client-side routing that needs SPA rewrites, for example:
+
+```json
+{
+   "rewrites": [
+      { "source": "/(.*)", "destination": "/index.html" }
+   ]
+}
+```
+
 ## 📖 Usage
 
 See [USER_GUIDE.md](./USER_GUIDE.md) for detailed instructions.
