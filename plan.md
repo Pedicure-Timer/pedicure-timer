@@ -1,76 +1,181 @@
-Kế hoạch chuẩn cho demo MVP Pedicure Timer và Digital Queue
+# Kế Hoạch Chuẩn Cho Demo MVP Pedicure Timer Và Digital Queue
 
-Kết luận điều hành
-Bản demo nên được build như một single-page web app chạy hoàn toàn client-side, dùng React với một reducer trung tâm để tất cả sự kiện nghiệp vụ đi qua cùng một “đường ống” trạng thái: bật ghế, hết giờ, thêm vào queue, manicure bấm Ready, assign khách mới, reset chair, reset all, và hydrate sau refresh. Cách này phù hợp với bản MVP vì useReducer được thiết kế để gom logic cập nhật state ra khỏi event handler, còn Vite cho vòng lặp dev nhanh và build ra static assets gọn để đưa lên một link share test nội bộ; nền tảng deploy hiện đại cũng hỗ trợ preview URL cho từng lần cập nhật, rất hợp với cách demo – sửa – gửi lại link cho chủ salon xem ngay. 
+## Kết Luận Điều Hành
 
-Điểm quan trọng nhất của bản demo này không phải là “vẽ dashboard thật đẹp”, mà là chốt đúng bốn quyết định kiến trúc: timer phải dựa trên mốc thời gian tuyệt đối chứ không đếm lùi bằng số; state phải được persist chủ động chứ không chờ lúc tab đóng; logic timer phải idempotent để không double-add queue khi chạy dev mode; và âm thanh phải có bước “bật âm thanh” do người dùng chủ động vì trình duyệt hiện đại chặn autoplay audio/Web Audio ngoài ngữ cảnh user gesture. Nếu khóa đúng bốn điểm này từ đầu, demo sẽ đủ tin cậy để test logic chống gian lận và UX vận hành với chủ salon trước khi đụng đến phần cứng thật. 
+Bản demo nên được build như một single-page web app chạy hoàn toàn client-side, dùng React với một reducer trung tâm để tất cả sự kiện nghiệp vụ đi qua cùng một đường ống trạng thái: bật ghế, hết giờ, thêm vào queue, manicure bấm Ready, assign khách mới, reset chair, reset all, và hydrate sau refresh. Cách này phù hợp với bản MVP vì `useReducer` gom logic cập nhật state ra khỏi event handler, còn Vite cho vòng lặp dev nhanh và build ra static assets gọn để đưa lên một link share test nội bộ.
 
-Phạm vi chuẩn của demo
-Phạm vi hợp lý cho demo là mô phỏng flow vận hành, không mô phỏng hạ tầng production. Điều đó có nghĩa là: bốn pedicure chairs, bốn manicure techs, chair timer 40/70 giây ở demo mode, queue FIFO theo readyAt, dashboard trạng thái màu + countdown + alert, nút mock “Simulate Chair On”, và một nút “Assign Next Customer” để mô phỏng receptionist lấy người đầu queue. Phần còn lại như tích hợp thiết bị thật, backend multi-user, auth, báo cáo, multi-salon, hay detection logic upgrade tự động nên để ngoài phạm vi của vòng demo này vì bản chất đây là bài test nghiệp vụ và UX chứ chưa phải hệ thống vận hành đa thiết bị. Việc giữ scope nhỏ là hợp lý vì Web Storage phù hợp cho dữ liệu nhỏ, theo origin, và persist qua các phiên trình duyệt, nhưng bản thân nó không phải tầng đồng bộ nhiều người dùng. 
+Điểm quan trọng nhất của bản demo này không phải là vẽ dashboard thật đẹp, mà là chốt đúng bốn quyết định kiến trúc:
 
-Một giả định vận hành rất nên chốt bằng văn bản ngay từ đầu là: bản demo chỉ có một “nguồn sự thật” trên một trình duyệt/chính thiết bị đang mở demo. localStorage tồn tại theo origin của trình duyệt và lưu qua các lần refresh, còn storage event chỉ giúp các tab khác cùng origin trên cùng môi trường duyệt web biết có thay đổi; nó không biến bản demo thành hệ thống realtime đa thiết bị. Nói cách khác, cùng một máy mở hai tab thì có thể đồng bộ cơ bản nếu muốn làm thêm, nhưng iPad và laptop khác nhau sẽ không tự chia sẻ state nếu không có backend. 
+- Timer phải dựa trên mốc thời gian tuyệt đối chứ không đếm lùi bằng số.
+- State phải được persist chủ động chứ không chờ lúc tab đóng.
+- Logic timer phải idempotent để không double-add queue khi chạy dev mode.
+- Âm thanh phải có bước “bật âm thanh” do người dùng chủ động vì trình duyệt hiện đại chặn autoplay audio/Web Audio ngoài ngữ cảnh user gesture.
 
-Cũng vì chọn lưu local state ở trình duyệt, hướng dẫn test cho chủ salon nên ghi rõ: không test ở chế độ incognito/private, vì theo tài liệu MDN, trong private mode thì localStorage được đối xử gần như sessionStorage và dữ liệu sẽ bị xóa khi đóng tab hoặc đóng trình duyệt. Điều này dễ gây hiểu nhầm rằng “app bị mất timer/queue sau khi thoát”, trong khi đó chỉ là đặc tính của môi trường duyệt web riêng tư. 
+Nếu khóa đúng bốn điểm này từ đầu, demo sẽ đủ tin cậy để test logic chống gian lận và UX vận hành với chủ salon trước khi đụng đến phần cứng thật.
 
-Kiến trúc kỹ thuật khuyến nghị
-Stack khuyến nghị vẫn bám đúng yêu cầu gốc nhưng tinh chỉnh để demo bền hơn: React + Tailwind + Vite, state tập trung bằng useReducer, side effects chỉ để đồng bộ với timer/audio/storage, và deploy static bằng một link share nội bộ. React mô tả useReducer là công cụ phù hợp khi muốn đưa logic update state ra khỏi handler vào một hàm reducer duy nhất; useEffect là nơi để đồng bộ với “external systems” như timer hay browser events; còn Vite được tài liệu chính thức mô tả là build tool hướng đến trải nghiệm dev nhanh, lean, có dev server và build optimized static assets cho production. 
+## Phạm Vi Chuẩn Của Demo
 
-Về timer engine, nên không lưu remainingSeconds như một biến “đếm xuống” để trừ đi mỗi giây. Thay vào đó, ngay khi chair bắt đầu, app lưu startedAt và endsAt dưới dạng epoch milliseconds; UI chỉ là kết quả của phép tính remainingMs = max(0, endsAt - Date.now()). Cách này đúng hơn vì Date.now() cho timestamp theo epoch, nên có thể persist qua refresh; trong khi performance.now() tuy là đồng hồ ổn định và monotonic hơn, nhưng được tính từ timeOrigin của phiên navigation hiện tại nên bất tiện hơn nếu mục tiêu là phục hồi timer sau reload. Lý do phải làm như vậy là vì timeout/interval ở background tabs có thể bị throttle, và requestAnimationFrame() còn có thể dừng hẳn khi tab bị ẩn. 
+Phạm vi hợp lý cho demo là mô phỏng flow vận hành, không mô phỏng hạ tầng production. Điều đó có nghĩa là:
 
-Cách persist đúng cho demo là ghi state sau mỗi action quan trọng và ghi bổ sung khi trang chuyển sang hidden qua visibilitychange. MDN nêu rõ beforeunload không đáng tin cậy, nhất là trên mobile, còn visibilitychange là sự kiện cuối cùng có thể quan sát tin cậy trước khi session thực tế kết thúc hoặc app bị đưa nền. Vì vậy, reducer nên cập nhật state trong memory trước, sau đó một effect nhỏ serialize state tối giản vào localStorage; khi app mount lại, hydration sẽ đọc state cũ, tính lại thời gian còn lại, và nếu thấy chair nào đã quá endsAt thì reconcile ngay sang finished thay vì chờ interval tiếp theo. 
+- Bốn pedicure chairs.
+- Bốn manicure techs.
+- Chair timer 40/70 giây ở demo mode.
+- Queue FIFO theo `readyAt`.
+- Dashboard trạng thái màu + countdown + alert.
+- Nút mock “Simulate Chair On”.
+- Nút “Assign Next Customer” để mô phỏng receptionist lấy người đầu queue.
 
-Về âm thanh, nên xem “Bật âm thanh” là một bước setup bắt buộc của demo chứ không phải phụ kiện. Tài liệu MDN về autoplay và Web Audio best practices đều chỉ ra rằng trình duyệt sẽ chặn việc tự phát âm thanh nếu không có user gesture; với Web Audio, nguyên tắc thực tế là “create or resume context from inside a user gesture”. Bởi vậy, banner đầu trang hoặc modal đầu phiên nên có nút “Bật âm thanh cảnh báo”, và chỉ sau cú click đó mới tạo hoặc resume() AudioContext. Khi timer hết, demo phát một beep ngắn bằng Web Audio API, không cần file mp3 để tránh phụ thuộc assets. 
+Phần còn lại như tích hợp thiết bị thật, backend multi-user, auth, báo cáo, multi-salon, hay detection logic upgrade tự động nên để ngoài phạm vi của vòng demo này vì bản chất đây là bài test nghiệp vụ và UX chứ chưa phải hệ thống vận hành đa thiết bị.
 
-Một điểm rất đáng làm đúng từ đầu là tách nguồn sự kiện với logic nghiệp vụ. Trong demo hôm nay, nguồn sự kiện là nút “Simulate Chair On”; sau này, ở production, nguồn sự kiện có thể là smart plug của Shelly gửi signal qua URL actions/webhooks hoặc scripting. Tài liệu sản phẩm cho thấy dòng plug này có power measurement, embedded web interface, hỗ trợ webhooks và scripting, đồng thời có thể chạy trong local Wi‑Fi. Vì thế, nếu ngay từ demo bạn chuẩn hóa action domain kiểu CHAIR_STARTED({ chairId, durationMs, source }), thì sau này phần rewrite chủ yếu chỉ là thay “button click” bằng “hardware event”, còn reducer và state machine gần như giữ nguyên. 
+Một giả định vận hành rất nên chốt bằng văn bản ngay từ đầu là: bản demo chỉ có một nguồn sự thật trên một trình duyệt hoặc chính thiết bị đang mở demo. `localStorage` tồn tại theo origin của trình duyệt và lưu qua các lần refresh, còn `storage` event chỉ giúp các tab khác cùng origin trên cùng môi trường duyệt web biết có thay đổi; nó không biến bản demo thành hệ thống realtime đa thiết bị.
 
-Mô hình dữ liệu và máy trạng thái
-Data model gốc của brief là đúng hướng, nhưng để demo bền hơn khi test edge case, tôi khuyến nghị nâng nó thành một model hơi “chuẩn hóa” hơn thay vì giữ nguyên bản tối thiểu.
+Cũng vì chọn lưu local state ở trình duyệt, hướng dẫn test cho chủ salon nên ghi rõ: không test ở chế độ incognito/private, vì trong private mode thì `localStorage` được đối xử gần như `sessionStorage` và dữ liệu sẽ bị xóa khi đóng tab hoặc đóng trình duyệt.
 
-Chair nên có các field: id, techId, status: 'idle' | 'running' | 'finished', serviceType, startedAt, endsAt, completedAt, lastCompletionToken.
-Tech nên có: id, name, role: 'pedi' | 'mani', status: 'idle' | 'queued' | 'assigned' | 'busy', readyAt, queueEntryId, chairId?.
-QueueEntry nên tách riêng thay vì dùng thẳng mảng tech IDs: id, techId, readyAt, seq, source: 'timer_complete' | 'manual_ready'.
-AppSettings nên có: demoMode, durations, soundEnabled, schemaVersion.
-AppMeta nên có: lastPersistedAt, nowOffset?, eventLog.
+## Kiến Trúc Kỹ Thuật Khuyến Nghị
 
-Điểm then chốt là chỉ persist state nền tảng, không persist derived state. Nghĩa là không lưu remainingSeconds, servingCount, hay queueLength trong storage; các giá trị đó phải được tính từ timestamps và collections hiện có. Với timer, thứ cần lưu là endsAt, không phải “còn 23 giây”. Với queue, thứ cần lưu là readyAt + seq, không phải “đứng thứ 2”. Cách này vừa chống sai số sau refresh, vừa làm reducer dễ kiểm soát hơn.
+Stack khuyến nghị vẫn bám đúng yêu cầu gốc nhưng tinh chỉnh để demo bền hơn: React + Tailwind + Vite, state tập trung bằng `useReducer`, side effects chỉ để đồng bộ với timer/audio/storage, và deploy static bằng một link share nội bộ. React mô tả `useReducer` là công cụ phù hợp khi muốn đưa logic update state ra khỏi handler vào một hàm reducer duy nhất; `useEffect` là nơi để đồng bộ với external systems như timer hay browser events; còn Vite được tài liệu chính thức mô tả là build tool hướng đến trải nghiệm dev nhanh, lean, có dev server và build optimized static assets cho production.
 
-Một tinh chỉnh quan trọng nữa là thêm seq làm tie-breaker cho queue. Trên lý thuyết, readyAt đã là FIFO, nhưng trong demo rất dễ có trường hợp hai thao tác xảy ra sát nhau đến mức cùng millisecond hoặc bị hydrate lại theo cùng timestamp. seq tăng dần theo mỗi lần enqueue sẽ giúp thứ tự ổn định và giải thích được. Về mặt UX, đây là khác biệt giữa một queue “có vẻ đúng” và một queue “không ai cãi được”.
+Về timer engine, nên không lưu `remainingSeconds` như một biến đếm xuống để trừ đi mỗi giây. Thay vào đó, ngay khi chair bắt đầu, app lưu `startedAt` và `endsAt` dưới dạng epoch milliseconds; UI chỉ là kết quả của phép tính `remainingMs = max(0, endsAt - Date.now())`.
 
-Reducer cũng phải được viết theo hướng idempotent. React giải thích rằng khi bật Strict Mode trong development, effect sẽ chạy thêm một vòng setup/cleanup để phát hiện bug; với timer logic, điều đó có thể vô tình gây double side effect nếu reducer không chặn transition bất hợp lệ. Vì thế, action CHAIR_EXPIRED phải kiểm tra chair còn đang running hay không trước khi chuyển sang finished; enqueue cũng phải từ chối nếu tech đã có queueEntryId hoặc đã ở trạng thái queued. Đây là lớp bảo vệ rất quan trọng để demo không phát sinh “tech bị vào queue hai lần” trong lúc dev hoặc hot reload. 
+Lý do phải làm như vậy là vì timeout/interval ở background tabs có thể bị throttle, và `requestAnimationFrame()` còn có thể dừng hẳn khi tab bị ẩn.
 
-Luồng nghiệp vụ và quyết định sản phẩm
-Flow chuẩn nên được diễn giải như sau. Khi chair bắt đầu, tech pedi trên chair đó bấm “Simulate Chair On”, chọn 40 hoặc 70, reducer ghi startedAt/endsAt, chair chuyển sang running, tech chuyển busy, và UI chỉ hiển thị countdown suy ra từ endsAt - Date.now(). Trong lúc chạy không có nút stop sớm. Đây là điểm chống gian lận quan trọng nhất của demo: hệ thống có thể cho reset sau khi hoàn tất, nhưng không cho “cắt non” một session đang chạy. 
+Cách persist đúng cho demo là ghi state sau mỗi action quan trọng và ghi bổ sung khi trang chuyển sang hidden qua `visibilitychange`. MDN nêu rõ `beforeunload` không đáng tin cậy, nhất là trên mobile, còn `visibilitychange` là sự kiện cuối cùng có thể quan sát tin cậy trước khi session thực tế kết thúc hoặc app bị đưa nền. Vì vậy, reducer nên cập nhật state trong memory trước, sau đó một effect nhỏ serialize state tối giản vào `localStorage`.
 
-Khi countdown chạm 0, app nên tự động chuyển chair sang finished, phát alert, và enqueue tech pedi ngay với readyAt = now. Không nên chèn thêm bước “tech xác nhận đã xong” trong bản demo chuẩn, vì như vậy sẽ làm yếu đi mục tiêu anti-cheat và làm queue quay lại phụ thuộc thao tác thủ công. Chair vẫn giữ màu vàng cho đến khi reset, nhưng availability của tech đã được ghi nhận tự động. Về mặt UX, đây là nơi nên xuất hiện cả tín hiệu âm thanh lẫn tín hiệu màn hình, không dựa vào một kênh duy nhất. 
+Về âm thanh, nên xem “Bật âm thanh” là một bước setup bắt buộc của demo chứ không phải phụ kiện. Trình duyệt sẽ chặn việc tự phát âm thanh nếu không có user gesture; với Web Audio, nguyên tắc thực tế là tạo hoặc resume context từ bên trong một user gesture. Bởi vậy, banner đầu trang hoặc modal đầu phiên nên có nút “Bật âm thanh cảnh báo”, và chỉ sau cú click đó mới tạo hoặc `resume()` `AudioContext`.
 
-Với manicure tech, nút “I’m Ready for Next Customer” chỉ nên enqueue nếu tech chưa ở queue và chưa bận. Queue luôn sort theo readyAt, rồi seq để giữ FIFO ổn định. Tôi khuyến nghị thêm một nút rõ ràng ở panel queue là “Assign Next Customer” thay vì âm thầm pop queue tự động. Lý do là khách mới đến vẫn là một sự kiện nghiệp vụ do con người quyết định, và bản demo cần mô phỏng được khoảnh khắc receptionist “giao khách” cho người đầu hàng. Khi bấm nút này, người đầu queue bị lấy ra: mani thì chuyển sang busy; pedi thì nên chuyển sang một trạng thái trung gian assigned nếu muốn mô phỏng chính xác giai đoạn “đã nhận khách nhưng chưa bật ghế”. Nếu muốn scope cực gọn thì có thể bỏ assigned, nhưng bản demo chuẩn nên giữ vì nó làm rõ khoảng trống nghiệp vụ giữa queue và chair start.
+Một điểm rất đáng làm đúng từ đầu là tách nguồn sự kiện với logic nghiệp vụ. Trong demo hôm nay, nguồn sự kiện là nút “Simulate Chair On”; sau này, ở production, nguồn sự kiện có thể là smart plug của Shelly gửi signal qua URL actions/webhooks hoặc scripting. Vì thế, nếu ngay từ demo bạn chuẩn hóa action domain kiểu `CHAIR_STARTED({ chairId, durationMs, source })`, thì sau này phần rewrite chủ yếu chỉ là thay button click bằng hardware event, còn reducer và state machine gần như giữ nguyên.
 
-Reset chair nên là flow độc lập với queue. Nghĩa là khi chair đã finished, tech có thể đã vào queue rồi; nút reset sau khi cleaning chỉ đưa chair về idle, không hủy queue entry nào đã được tạo trước đó. Điều này bám khá sát cách salon vận hành: availability của tech được tính khi service kết thúc, còn readiness của ghế là một bước thao tác vật lý tiếp theo. Nếu trộn hai việc này vào một action, dashboard sẽ khó giải thích và rất dễ phát sinh tranh cãi “đã rảnh chưa” với “ghế đã dọn chưa”.
+## Mô Hình Dữ Liệu Và Máy Trạng Thái
+
+Data model gốc của brief là đúng hướng, nhưng để demo bền hơn khi test edge case, nên nâng nó thành một model hơi chuẩn hóa hơn thay vì giữ nguyên bản tối thiểu.
+
+### Chair
+
+- `id`
+- `techId`
+- `status: 'idle' | 'running' | 'finished'`
+- `serviceType`
+- `startedAt`
+- `endsAt`
+- `completedAt`
+- `lastCompletionToken`
+
+### Tech
+
+- `id`
+- `name`
+- `role: 'pedi' | 'mani'`
+- `status: 'idle' | 'queued' | 'assigned' | 'busy'`
+- `readyAt`
+- `queueEntryId`
+- `chairId?`
+
+### QueueEntry
+
+QueueEntry nên tách riêng thay vì dùng thẳng mảng tech IDs:
+
+- `id`
+- `techId`
+- `readyAt`
+- `seq`
+- `source: 'timer_complete' | 'manual_ready'`
+
+### AppSettings
+
+- `demoMode`
+- `durations`
+- `soundEnabled`
+- `schemaVersion`
+
+### AppMeta
+
+- `lastPersistedAt`
+- `nowOffset?`
+- `eventLog`
+
+Điểm then chốt là chỉ persist state nền tảng, không persist derived state. Nghĩa là không lưu `remainingSeconds`, `servingCount`, hay `queueLength` trong storage; các giá trị đó phải được tính từ timestamps và collections hiện có.
+
+Với timer, thứ cần lưu là `endsAt`, không phải “còn 23 giây”. Với queue, thứ cần lưu là `readyAt + seq`, không phải “đứng thứ 2”. Cách này vừa chống sai số sau refresh, vừa làm reducer dễ kiểm soát hơn.
+
+Một tinh chỉnh quan trọng nữa là thêm `seq` làm tie-breaker cho queue. Trên lý thuyết, `readyAt` đã là FIFO, nhưng trong demo rất dễ có trường hợp hai thao tác xảy ra sát nhau đến mức cùng millisecond hoặc bị hydrate lại theo cùng timestamp. `seq` tăng dần theo mỗi lần enqueue sẽ giúp thứ tự ổn định và giải thích được.
+
+Reducer cũng phải được viết theo hướng idempotent. Khi bật Strict Mode trong development, effect sẽ chạy thêm một vòng setup/cleanup để phát hiện bug; với timer logic, điều đó có thể vô tình gây double side effect nếu reducer không chặn transition bất hợp lệ. Vì thế, action `CHAIR_EXPIRED` phải kiểm tra chair còn đang running hay không trước khi chuyển sang finished; enqueue cũng phải từ chối nếu tech đã có `queueEntryId` hoặc đã ở trạng thái queued.
+
+## Luồng Nghiệp Vụ Và Quyết Định Sản Phẩm
+
+Flow chuẩn nên được diễn giải như sau. Khi chair bắt đầu, tech pedi trên chair đó bấm “Simulate Chair On”, chọn 40 hoặc 70, reducer ghi `startedAt/endsAt`, chair chuyển sang running, tech chuyển busy, và UI chỉ hiển thị countdown suy ra từ `endsAt - Date.now()`. Trong lúc chạy không có nút stop sớm. Đây là điểm chống gian lận quan trọng nhất của demo: hệ thống có thể cho reset sau khi hoàn tất, nhưng không cho cắt non một session đang chạy.
+
+Khi countdown chạm 0, app nên tự động chuyển chair sang finished, phát alert, và enqueue tech pedi ngay với `readyAt = now`. Không nên chèn thêm bước “tech xác nhận đã xong” trong bản demo chuẩn, vì như vậy sẽ làm yếu đi mục tiêu anti-cheat và làm queue quay lại phụ thuộc thao tác thủ công.
+
+Với manicure tech, nút “I’m Ready for Next Customer” chỉ nên enqueue nếu tech chưa ở queue và chưa bận. Queue luôn sort theo `readyAt`, rồi `seq` để giữ FIFO ổn định. Nên thêm một nút rõ ràng ở panel queue là “Assign Next Customer” thay vì âm thầm pop queue tự động.
+
+Reset chair nên là flow độc lập với queue. Nghĩa là khi chair đã finished, tech có thể đã vào queue rồi; nút reset sau khi cleaning chỉ đưa chair về idle, không hủy queue entry nào đã được tạo trước đó. Điều này bám khá sát cách salon vận hành: availability của tech được tính khi service kết thúc, còn readiness của ghế là một bước thao tác vật lý tiếp theo.
 
 Ba quyết định sản phẩm nên chốt luôn trong bản kế hoạch này là:
 
-Khi timer hết, tech có vào queue ngay không? Nên vào ngay tự động. Đây là lựa chọn đúng nhất cho mục tiêu demo anti-cheat và làm cho queue thực sự thay sổ tay.
-Nếu khách upgrade giữa session thì sao? Bản demo chuẩn không nên tự động detect upgrade. Nếu chủ salon thật sự muốn xem flow này, chỉ thêm một action một chiều “Extend to 70” dành cho supervisor/demo, có confirm rõ ràng, không làm detection tự động. Làm vậy vẫn test được UX mà không kéo demo vào vùng logic phức tạp vốn đã được brief loại khỏi scope.
-Queue có cần theo skill/level không? MVP nên FIFO thuần. Tuy nhiên data model có thể chừa sẵn skillTags hoặc serviceCapabilities để sau này mở rộng mà không phải đập model.
-Thiết kế giao diện và trải nghiệm demo
-Bố cục hiện tại nên giữ tinh thần rất rõ: top bar cho metric tức thời, cột trái cho bốn chair cards, cột phải cho next available queue. Mỗi chair card cần hiển thị đủ bốn thứ: tên tech, trạng thái, countdown lớn nếu đang chạy, và hành động đúng ngữ cảnh. Với idle, card cho phép mock start; với running, card chỉ hiển thị countdown và khóa stop; với finished, card cho reset và nhấn mạnh rằng chair chưa ready cho khách tiếp. Queue panel cần hiển thị người đầu hàng đợi nổi bật, dấu mốc thời gian ready, và các action “I’m Ready” cho mani techs cùng “Assign Next Customer” cho mô phỏng receptionist.
+1. Khi timer hết, tech có vào queue ngay không? Nên vào ngay tự động.
+2. Nếu khách upgrade giữa session thì sao? Bản demo chuẩn không nên tự động detect upgrade. Nếu chủ salon thật sự muốn xem flow này, chỉ thêm một action một chiều “Extend to 70” dành cho supervisor/demo, có confirm rõ ràng, không làm detection tự động.
+3. Queue có cần theo skill/level không? MVP nên FIFO thuần. Tuy nhiên data model có thể chừa sẵn `skillTags` hoặc `serviceCapabilities` để sau này mở rộng mà không phải đập model.
 
-Về accessibility và độ rõ ràng vận hành, không nên dựa vào màu sắc đơn thuần để diễn đạt trạng thái. WCAG nêu rất rõ rằng color không được là phương tiện trực quan duy nhất để conveying information, và text thường cần contrast tối thiểu 4.5:1 để đủ dễ đọc. Vì vậy, ngoài màu xám/xanh/vàng, mỗi card nên có badge chữ như “Idle”, “Running”, “Finished”, cộng thêm icon hoặc viền để người dùng vẫn hiểu được dù ánh sáng salon kém hoặc màn hình nhìn chéo. Với phần cập nhật động, queue header hoặc dòng “Người tiếp theo” nên dùng vùng role="status" với aria-live="polite"; còn khi timer hết, system banner hoặc toast nên dùng role="alert" vì đây là thông tin thời điểm, cần chú ý ngay. 
+## Thiết Kế Giao Diện Và Trải Nghiệm Demo
 
-Vì chủ salon có thể test trên tablet, target size không nên chỉ “đủ bấm được”. Chuẩn WCAG 2.2 đặt mức tối thiểu 24×24 CSS pixels cho pointer targets, còn MDN khuyến nghị 44×44 CSS pixels cho interactive elements để dễ bấm hơn trên touchscreens. Đồng thời, responsive layout nên dùng breakpoints rõ ràng để trên màn hình vừa và lớn thì hai cột đứng cạnh nhau, còn trên màn hình hẹp hơn thì queue xuống dưới. Tailwind hỗ trợ cấu hình breakpoints trực tiếp trong theme.screens, và tài liệu responsive design của MDN khuyến nghị dùng grid/flex + media query/breakpoint theo hướng mobile-first. 
+Bố cục hiện tại nên giữ tinh thần rất rõ: top bar cho metric tức thời, cột trái cho bốn chair cards, cột phải cho next available queue. Mỗi chair card cần hiển thị đủ bốn thứ: tên tech, trạng thái, countdown lớn nếu đang chạy, và hành động đúng ngữ cảnh.
 
-Để buổi demo với chủ salon diễn ra mượt, tôi rất khuyến nghị thêm một cụm “demo affordances” nằm ngoài main flow nhưng cực kỳ có ích: Demo mode toggle 40s/70s, Enable sound, Reset all, Load sample state, và một event log nhỏ ở cạnh dưới hoặc drawer. Event log không cần đẹp, chỉ cần đủ để giải thích: “Chair 2 started 70s”, “Chair 2 finished”, “Lan added to queue”, “Mai marked ready”, “Assigned next customer to Lan”. Khi demo logic với người không đọc code, event log là công cụ thuyết phục mạnh nhất sau countdown.
+- Với idle, card cho phép mock start.
+- Với running, card chỉ hiển thị countdown và khóa stop.
+- Với finished, card cho reset và nhấn mạnh rằng chair chưa ready cho khách tiếp.
 
-Lộ trình build, test và bàn giao
+Queue panel cần hiển thị người đầu hàng đợi nổi bật, dấu mốc thời gian ready, và các action “I’m Ready” cho mani techs cùng “Assign Next Customer” cho mô phỏng receptionist.
+
+Về accessibility và độ rõ ràng vận hành, không nên dựa vào màu sắc đơn thuần để diễn đạt trạng thái. WCAG nêu rất rõ rằng color không được là phương tiện trực quan duy nhất để conveying information, và text thường cần contrast tối thiểu 4.5:1 để đủ dễ đọc. Vì vậy, ngoài màu xám/xanh/vàng, mỗi card nên có badge chữ như “Idle”, “Running”, “Finished”, cộng thêm icon hoặc viền để người dùng vẫn hiểu được dù ánh sáng salon kém hoặc màn hình nhìn chéo.
+
+Với phần cập nhật động, queue header hoặc dòng “Người tiếp theo” nên dùng vùng `role="status"` với `aria-live="polite"`; còn khi timer hết, system banner hoặc toast nên dùng `role="alert"` vì đây là thông tin thời điểm, cần chú ý ngay.
+
+Vì chủ salon có thể test trên tablet, target size không nên chỉ đủ bấm được. Chuẩn WCAG 2.2 đặt mức tối thiểu 24×24 CSS pixels cho pointer targets, còn MDN khuyến nghị 44×44 CSS pixels cho interactive elements để dễ bấm hơn trên touchscreens. Đồng thời, responsive layout nên dùng breakpoints rõ ràng để trên màn hình vừa và lớn thì hai cột đứng cạnh nhau, còn trên màn hình hẹp hơn thì queue xuống dưới.
+
+Để buổi demo với chủ salon diễn ra mượt, nên thêm một cụm demo affordances nằm ngoài main flow nhưng cực kỳ có ích:
+
+- Demo mode toggle 40s/70s.
+- Enable sound.
+- Reset all.
+- Load sample state.
+- Event log nhỏ ở cạnh dưới hoặc drawer.
+
+Event log không cần đẹp, chỉ cần đủ để giải thích: “Chair 2 started 70s”, “Chair 2 finished”, “Lan added to queue”, “Mai marked ready”, “Assigned next customer to Lan”. Khi demo logic với người không đọc code, event log là công cụ thuyết phục mạnh nhất sau countdown.
+
+## Lộ Trình Build, Test Và Bàn Giao
+
 Lộ trình hợp lý cho một demo nhỏ nhưng làm đúng chuẩn là bảy ngày làm việc ngắn, với mỗi ngày có output nhìn thấy được:
 
-Ngày đầu: khởi tạo project React/Vite/Tailwind, dựng layout khung, reducer skeleton, fixtures cho 4 chairs và 4 mani techs, cơ chế persist tối thiểu vào localStorage. 
-Ngày tiếp theo: dựng chair card hoàn chỉnh, mock start 40/70, countdown hiển thị lớn, state transitions idle -> running -> finished.
-Ngày sau đó: hoàn thiện timer engine theo endsAt - Date.now(), hydration sau refresh, reconcile khi tab quay lại từ background, persist thêm qua visibilitychange. 
-Ngày kế: làm queue FIFO, action “I’m Ready”, Assign Next Customer, tie-breaker seq, chặn duplicate queue entries, và rule idempotent trong reducer. 
-Ngày tiếp: thêm alert âm thanh, banner “Bật âm thanh”, nhãn trạng thái, badge, responsive touch targets, contrast, live region cho status/alert. 
-Ngày áp chót: test edge cases, làm Reset all, Load sample state, event log, và nếu còn thời gian thì support sync giữa nhiều tab cùng origin bằng storage event như một tiện ích “same-device only”. 
-Ngày cuối: deploy bản static, tạo link share ổn định, dùng preview deployments cho các vòng chỉnh sửa tiếp theo, và viết 1 trang hướng dẫn nội bộ cho chủ salon test đúng flow. 
-Checklist test nên được chốt trước khi đưa cho chủ salon gồm ít nhất các ca sau: refresh khi timer còn 17 giây; để tab ẩn rồi quay lại; hai tech ready sát nhau; mani bấm Ready hai lần liên tiếp; timer hết ngay khi vừa refresh; chair finished nhưng chưa reset; assign queue khi queue rỗng; demo chạy ở private mode; và reset all giữa lúc có chair đang chạy. Với danh sách này, chủ salon sẽ không chỉ “xem thấy app chạy”, mà sẽ test đúng những điểm từng gây đau ở vận hành thực tế.
+1. Ngày đầu: khởi tạo project React/Vite/Tailwind, dựng layout khung, reducer skeleton, fixtures cho 4 chairs và 4 mani techs, cơ chế persist tối thiểu vào `localStorage`.
+2. Ngày tiếp theo: dựng chair card hoàn chỉnh, mock start 40/70, countdown hiển thị lớn, state transitions idle -> running -> finished.
+3. Ngày sau đó: hoàn thiện timer engine theo `endsAt - Date.now()`, hydration sau refresh, reconcile khi tab quay lại từ background, persist thêm qua `visibilitychange`.
+4. Ngày kế: làm queue FIFO, action “I’m Ready”, Assign Next Customer, tie-breaker `seq`, chặn duplicate queue entries, và rule idempotent trong reducer.
+5. Ngày tiếp: thêm alert âm thanh, banner “Bật âm thanh”, nhãn trạng thái, badge, responsive touch targets, contrast, live region cho status/alert.
+6. Ngày áp chót: test edge cases, làm Reset all, Load sample state, event log, và nếu còn thời gian thì support sync giữa nhiều tab cùng origin bằng `storage` event như một tiện ích same-device only.
+7. Ngày cuối: deploy bản static, tạo link share ổn định, dùng preview deployments cho các vòng chỉnh sửa tiếp theo, và viết một trang hướng dẫn nội bộ cho chủ salon test đúng flow.
 
-Bản bàn giao của demo nên gồm bốn thứ: repository hoặc source zip, link chạy thử, một file hướng dẫn sử dụng cực ngắn, và một nút xóa cache/state trong app. Phần hướng dẫn cần ghi rõ rằng bản demo hoạt động tốt nhất khi mở trong trình duyệt thường, trên một thiết bị làm nguồn sự thật; nếu mở ở chế độ riêng tư hoặc đổi giữa nhiều thiết bị khác nhau, state sẽ không có tính chất đồng bộ production. 
+Checklist test nên được chốt trước khi đưa cho chủ salon gồm ít nhất các ca sau:
+
+- Refresh khi timer còn 17 giây.
+- Để tab ẩn rồi quay lại.
+- Hai tech ready sát nhau.
+- Mani bấm Ready hai lần liên tiếp.
+- Timer hết ngay khi vừa refresh.
+- Chair finished nhưng chưa reset.
+- Assign queue khi queue rỗng.
+- Demo chạy ở private mode.
+- Reset all giữa lúc có chair đang chạy.
+
+Với danh sách này, chủ salon sẽ không chỉ xem thấy app chạy, mà sẽ test đúng những điểm từng gây đau ở vận hành thực tế.
+
+## Bản Bàn Giao
+
+Bản bàn giao của demo nên gồm bốn thứ:
+
+- Repository hoặc source zip.
+- Link chạy thử.
+- Một file hướng dẫn sử dụng cực ngắn.
+- Một nút xóa cache/state trong app.
+
+Phần hướng dẫn cần ghi rõ rằng bản demo hoạt động tốt nhất khi mở trong trình duyệt thường, trên một thiết bị làm nguồn sự thật; nếu mở ở chế độ riêng tư hoặc đổi giữa nhiều thiết bị khác nhau, state sẽ không có tính chất đồng bộ production.

@@ -47,6 +47,10 @@ export interface Translations {
   // Sections
   pedicureChairs: string
   manicureTechs: string
+
+  // Quick Guide
+  quickGuideTitle: string
+  quickGuideSteps: string[]
 }
 
 export const translations: Record<Language, Translations> = {
@@ -90,6 +94,14 @@ export const translations: Record<Language, Translations> = {
 
     pedicureChairs: 'Pedicure Chairs',
     manicureTechs: 'Manicure Techs',
+
+    quickGuideTitle: 'Quick Guide',
+    quickGuideSteps: [
+      'Click Start on any idle chair to begin timer',
+      'Add customers to queue for manicure service',
+      'Techs mark themselves ready when available',
+      'Assign next customer to ready technician',
+    ],
   },
   vi: {
     appTitle: 'Hẹn Giờ & Hàng Đợi Pedicure',
@@ -131,5 +143,13 @@ export const translations: Record<Language, Translations> = {
 
     pedicureChairs: 'Ghế Pedicure',
     manicureTechs: 'Nhân Viên Manicure',
+
+    quickGuideTitle: 'Hướng Dẫn Nhanh',
+    quickGuideSteps: [
+      'Nhấn Bắt Đầu trên bất kỳ ghế rảnh nào để chạy hẹn giờ',
+      'Thêm khách hàng vào hàng đợi cho dịch vụ manicure',
+      'Nhân viên tự đánh dấu sẵn sàng khi có thể phục vụ',
+      'Phân khách tiếp theo cho nhân viên đang sẵn sàng',
+    ],
   },
 }

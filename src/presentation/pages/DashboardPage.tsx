@@ -68,25 +68,15 @@ export const DashboardPage: React.FC = () => {
             <div className="rounded-xl border bg-card p-6 shadow-sm">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Quick Guide
+                {t.quickGuideTitle}
               </h3>
               <ul className="space-y-2 text-xs text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">1.</span>
-                  <span>Click <strong>Start</strong> on any idle chair to begin timer</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">2.</span>
-                  <span>Add customers to queue for manicure service</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">3.</span>
-                  <span>Techs mark themselves ready when available</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary font-bold">4.</span>
-                  <span>Assign next customer to ready technician</span>
-                </li>
+                {t.quickGuideSteps.map((step, index) => (
+                  <li key={step} className="flex items-start gap-2">
+                    <span className="text-primary font-bold">{index + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </aside>
