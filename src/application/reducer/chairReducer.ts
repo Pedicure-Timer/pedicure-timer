@@ -42,7 +42,6 @@ export const chairReducer = (chairs: Chair[], action: ChairAction): Chair[] => {
       const { chairId } = action.payload
       return chairs.map((chair) => {
         if (chair.id !== chairId) return chair
-        if (chair.status !== 'finished') return chair
         return {
           ...chair,
           status: 'idle',

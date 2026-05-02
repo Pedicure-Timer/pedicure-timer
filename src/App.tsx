@@ -8,12 +8,13 @@ import { useSound } from './presentation/hooks/useSound'
 import { DashboardPage } from './presentation/pages/DashboardPage'
 import { shouldTransitionToFinished } from './domain/rules/chairRules'
 import { generateId } from './shared/utils/id'
-import { LanguageProvider } from './shared/i18n'
+import { LanguageProvider, useLanguage } from './shared/i18n'
 
 const AppContent: React.FC = () => {
   const state = useAppState()
   const dispatch = useAppDispatch()
   const { beep } = useSound()
+  const { t } = useLanguage()
 
   usePersistence(state)
   useHydration(dispatch)
@@ -40,7 +41,7 @@ const AppContent: React.FC = () => {
           dispatch({
             type: 'QUEUE_ENQUEUE',
             payload: {
-              customerName: `Customer from Chair ${chair.id.slice(-1)}`,
+              customerName: t.customerFromChair(chair.id.slice(-1)),
               source: 'chair-finished',
             },
           })
@@ -49,7 +50,7 @@ const AppContent: React.FC = () => {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [state.chairs, state.settings.soundEnabled, dispatch, beep])
+  }, [state.chairs, state.settings.soundEnabled, dispatch, beep, t])
 
   return <DashboardPage />
 }

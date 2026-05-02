@@ -8,20 +8,19 @@ const buildEventLog = (baseTime: number): EventLogEntry[] => [
   {
     id: generateId(),
     timestamp: baseTime - 240000,
-    label: 'Sample state loaded',
-    detail: 'Demo snapshot prepared for salon walkthrough',
+    label: 'LOAD_SAMPLE_STATE',
   },
   {
     id: generateId(),
     timestamp: baseTime - 120000,
-    label: 'Chair 2 finished',
-    detail: 'Tech Lan joined the queue automatically',
+    label: 'CHAIR_EXPIRED',
+    detail: { kind: 'chair', chairId: 'chair-2' },
   },
   {
     id: generateId(),
     timestamp: baseTime - 45000,
-    label: 'Mai marked ready',
-    detail: 'Reception can assign the next customer',
+    label: 'TECH_READY',
+    detail: { kind: 'tech', techId: 'tech-2' },
   },
 ]
 
@@ -38,7 +37,7 @@ export const buildSampleState = (): AppState => {
         status: 'running',
         serviceType: 'pedi',
         techId: techId('tech-1'),
-        customerName: 'Customer from Chair 1',
+        customerName: 'An',
         assignedAt: baseTime - 22000,
         startedAt: baseTime - 22000,
         endsAt: chairOneEnd,
@@ -50,7 +49,7 @@ export const buildSampleState = (): AppState => {
         status: 'finished',
         serviceType: 'pedi',
         techId: techId('tech-2'),
-        customerName: 'Customer from Chair 2',
+        customerName: 'Bình',
         assignedAt: baseTime - 86000,
         startedAt: baseTime - 86000,
         endsAt: chairTwoEnd,
@@ -91,7 +90,7 @@ export const buildSampleState = (): AppState => {
     queue: [
       {
         id: queueId(generateId()),
-        customerName: 'Customer from Chair 2',
+        customerName: 'Bình',
         source: 'chair-finished',
         enqueuedAt: baseTime - 6000,
         seq: 1,

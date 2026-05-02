@@ -1,10 +1,20 @@
+import type { AppAction } from '@/application/actions'
 import type { Chair, Tech, QueueEntry } from '@/domain/entities'
+
+export type EventLogDetail =
+  | { kind: 'chair'; chairId: string }
+  | { kind: 'completionToken'; completionToken: string }
+  | { kind: 'tech'; techId: string }
+  | { kind: 'customer'; customerName: string }
+  | { kind: 'state'; enabled: boolean }
+
+export type EventLogLabel = AppAction['type']
 
 export interface EventLogEntry {
   id: string
   timestamp: number
-  label: string
-  detail?: string
+  label: EventLogLabel
+  detail?: EventLogDetail
 }
 
 export interface AppSettings {

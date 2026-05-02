@@ -29,55 +29,71 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
       label: t.busy,
       cardClass: 'border-border',
       iconClass: 'text-muted-foreground',
+      helper: t.busyHint,
     },
     ready: {
       variant: 'default' as const,
       label: t.ready,
       cardClass: 'border-success/30 bg-success/[0.02]',
       iconClass: 'text-success',
+      helper: t.readyHint,
     },
     assigned: {
       variant: 'outline' as const,
       label: t.assigned,
       cardClass: 'border-accent/30 bg-accent/[0.02]',
       iconClass: 'text-accent',
+      helper: t.assignedHint,
     },
   }[tech.status]
 
   return (
     <Card className={cn(
-      'transition-all duration-300 hover:shadow-elevated',
+      'transition-all duration-300 hover:shadow-elevated overflow-hidden',
       statusConfig.cardClass
     )}>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+      <div className={cn(
+        "h-1.5 w-full",
+        tech.status === 'busy' && 'bg-muted-foreground',
+        tech.status === 'ready' && 'bg-success',
+        tech.status === 'assigned' && 'bg-accent'
+      )} />
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-3 gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
             <div className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-lg bg-muted",
+              "flex h-10 w-10 items-center justify-center rounded-2xl bg-muted ring-1 ring-border/60 flex-shrink-0",
               tech.status === 'ready' && 'bg-success/10',
               tech.status === 'assigned' && 'bg-accent/10'
             )}>
               <User className={cn("h-4 w-4", statusConfig.iconClass)} />
             </div>
-            <h4 className="font-semibold text-sm">{tech.name}</h4>
+            <div className="min-w-0 flex-1">
+              <h4 className="font-bold text-sm truncate">{tech.name}</h4>
+              <p className="text-xs text-muted-foreground mt-0.5 truncate">{t.techDescription}</p>
+            </div>
           </div>
-          <Badge variant={statusConfig.variant} className="text-xs">
+          <Badge variant={statusConfig.variant} className="text-xs rounded-full px-3 py-1 whitespace-nowrap flex-shrink-0">
             {statusConfig.label}
           </Badge>
         </div>
 
         {tech.chairId && (
-          <div className="mb-3 rounded-lg border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+          <div className="mb-3 rounded-2xl border border-border/70 bg-muted/25 px-4 py-3 text-xs text-muted-foreground">
             {t.chair}: <span className="font-medium text-foreground">{tech.chairId}</span>
           </div>
         )}
+
+        <div className="mb-3 text-xs leading-6 text-muted-foreground">
+          {statusConfig.helper}
+        </div>
 
         {tech.status === 'busy' && (
           <Button
             onClick={handleReady}
             variant="outline"
             size="sm"
-            className="w-full mt-2 h-9"
+            className="w-full mt-2 h-10 rounded-2xl"
           >
             <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
             {t.imReady}

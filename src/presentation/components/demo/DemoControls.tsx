@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/presentation/components/ui/alert-dialog'
-import { RotateCcw, Settings, Zap, AlertTriangle, Layers3 } from 'lucide-react'
+import { RotateCcw, Zap, AlertTriangle, Layers3, SlidersHorizontal } from 'lucide-react'
 
 export const DemoControls: React.FC = () => {
   const { settings } = useAppState()
@@ -40,36 +40,42 @@ export const DemoControls: React.FC = () => {
   return (
     <Card className="shadow-elevated">
       <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-            <Settings className="w-4 h-4 text-foreground" />
-          </div>
-          {t.demoControls}
-        </CardTitle>
+        <div className="flex items-start justify-between gap-4">
+          <CardTitle className="flex items-center gap-3 text-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <SlidersHorizontal className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-base font-bold">{t.demoControls}</div>
+              <div className="text-xs text-muted-foreground font-normal">{t.demoControlsHint}</div>
+            </div>
+          </CardTitle>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-3">
-        {/* Demo Mode Toggle */}
-        <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50 border border-border">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background">
-              <Zap className="h-5 w-5 text-warning" />
+      <CardContent className="space-y-4">
+        <div className="rounded-2xl border border-border/70 bg-muted/25 p-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-warning/10 text-warning">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold">{t.demoMode}</div>
+                <div className="text-xs text-muted-foreground">{t.demoModeDesc}</div>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <div className="text-sm font-medium">{t.demoMode}</div>
-              <div className="text-xs text-muted-foreground">{t.demoModeDesc}</div>
-            </div>
+            <Switch
+              checked={settings.demoMode}
+              onCheckedChange={handleToggleDemo}
+              className="data-[state=checked]:bg-warning"
+            />
           </div>
-          <Switch
-            checked={settings.demoMode}
-            onCheckedChange={handleToggleDemo}
-            className="data-[state=checked]:bg-warning"
-          />
         </div>
 
         {/* Reset All Button */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="w-full h-10 shadow-sm">
+            <Button variant="destructive" className="w-full h-11 shadow-sm rounded-2xl">
               <RotateCcw className="w-4 h-4 mr-2" />
               {t.resetAll}
             </Button>
@@ -87,15 +93,15 @@ export const DemoControls: React.FC = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{t.cancel}</AlertDialogCancel>
               <AlertDialogAction onClick={handleResetAll} className="bg-destructive hover:bg-destructive/90">
-                Continue
+                {t.confirm}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
 
-        <Button variant="secondary" className="w-full h-10 shadow-sm" onClick={handleLoadSampleState}>
+        <Button variant="secondary" className="w-full h-11 shadow-sm rounded-2xl" onClick={handleLoadSampleState}>
           <Layers3 className="w-4 h-4 mr-2" />
           {t.loadSampleState}
         </Button>

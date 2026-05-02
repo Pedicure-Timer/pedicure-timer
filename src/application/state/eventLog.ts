@@ -1,46 +1,30 @@
 import type { AppAction } from '@/application/actions'
-import type { EventLogEntry } from './AppState'
+import type { EventLogEntry, EventLogDetail } from './AppState'
 import { generateId } from '@/shared/utils/id'
 import { nowMs } from '@/shared/utils/time'
 
-const actionLabelMap: Partial<Record<AppAction['type'], string>> = {
-  CHAIR_STARTED: 'Chair started',
-  CHAIR_EXPIRED: 'Chair finished',
-  CHAIR_RESET: 'Chair reset',
-  TECH_READY: 'Tech marked ready',
-  TECH_ASSIGNED: 'Tech assigned',
-  TECH_BUSY: 'Tech marked busy',
-  QUEUE_ENQUEUE: 'Customer added to queue',
-  QUEUE_ASSIGN_NEXT: 'Next customer assigned',
-  RESET_ALL: 'Reset all state',
-  DEMO_MODE_SET: 'Demo mode changed',
-  SOUND_ENABLED: 'Sound setting changed',
-  LOAD_SAMPLE_STATE: 'Sample state loaded',
-}
-
 export const createEventLogEntry = (action: AppAction): EventLogEntry | null => {
-  const label = actionLabelMap[action.type]
-  if (!label) return null
-
   const detail =
     action.type === 'CHAIR_STARTED'
-      ? `Chair ${action.payload.chairId}`
+      ? ({ kind: 'chair', chairId: action.payload.chairId } as EventLogDetail)
       : action.type === 'CHAIR_EXPIRED'
-        ? `Completion token ${action.payload.completionToken}`
+        ? ({ kind: 'completionToken', completionToken: action.payload.completionToken } as EventLogDetail)
         : action.type === 'CHAIR_RESET'
-          ? `Chair ${action.payload.chairId}`
+          ? ({ kind: 'chair', chairId: action.payload.chairId } as EventLogDetail)
           : action.type === 'TECH_READY' || action.type === 'TECH_ASSIGNED' || action.type === 'TECH_BUSY'
-            ? `Tech ${action.payload.techId}`
+            ? ({ kind: 'tech', techId: action.payload.techId } as EventLogDetail)
             : action.type === 'QUEUE_ENQUEUE'
-              ? action.payload.customerName
+              ? ({ kind: 'customer', customerName: action.payload.customerName } as EventLogDetail)
               : action.type === 'DEMO_MODE_SET' || action.type === 'SOUND_ENABLED'
-                ? `${action.payload.enabled ? 'Enabled' : 'Disabled'}`
+                ? ({ kind: 'state', enabled: action.payload.enabled } as EventLogDetail)
                 : undefined
+
+  if (!detail) return null
 
   return {
     id: generateId(),
     timestamp: nowMs(),
-    label,
+    label: action.type,
     detail,
   }
 }

@@ -3,7 +3,7 @@ import { useAppState, useAppDispatch } from '@/presentation/context/useAppDispat
 import { useSound } from '@/presentation/hooks/useSound'
 import { useLanguage } from '@/shared/i18n'
 import { Button } from '@/presentation/components/ui/button'
-import { Volume2, X } from 'lucide-react'
+import { Volume2, X, BellRing } from 'lucide-react'
 
 export const SoundBanner: React.FC = () => {
   const { settings } = useAppState()
@@ -29,22 +29,24 @@ export const SoundBanner: React.FC = () => {
   if (settings.soundEnabled) return null
 
   return (
-    <div className="border-b bg-warning/5 backdrop-blur-sm">
-      <div className="container mx-auto px-6 py-3">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10">
-              <Volume2 className="h-4 w-4 text-warning" />
+    <div className="border-b border-warning/20 bg-warning/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
+        <div className="flex flex-col gap-3 rounded-2xl border border-warning/20 bg-card/90 px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-warning/15 text-warning ring-1 ring-warning/20">
+              <BellRing className="h-4 w-4" />
             </div>
-            <p className="text-sm font-medium text-foreground">
-              {t.soundBannerText}
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-foreground">{t.soundBannerTitle}</p>
+              <p className="text-sm text-muted-foreground">{t.soundBannerDescription}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button onClick={handleEnable} size="sm" className="shadow-sm">
+              <Volume2 className="h-4 w-4" />
               {t.enableSound}
             </Button>
-            <Button onClick={handleDismiss} variant="ghost" size="sm">
+            <Button onClick={handleDismiss} variant="ghost" size="sm" className="text-muted-foreground">
               <X className="h-4 w-4" />
             </Button>
           </div>

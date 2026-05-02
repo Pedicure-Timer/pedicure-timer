@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { rootReducer } from './rootReducer'
 import { buildInitialState } from '../state/initialState'
 import { buildSampleState } from '../state/sampleState'
-import { chairId } from '@/shared/types/branded'
+import { chairId, techId } from '@/shared/types/branded'
 
 describe('rootReducer', () => {
   it('loads the sample state preset', () => {
@@ -27,16 +27,32 @@ describe('rootReducer', () => {
 
     expect(nextState.queue).toHaveLength(1)
     expect(nextState.meta.queueSeqCounter).toBe(1)
-    expect(nextState.meta.eventLog[nextState.meta.eventLog.length - 1]?.label).toBe('Customer added to queue')
+    expect(nextState.meta.eventLog[nextState.meta.eventLog.length - 1]?.label).toBe('QUEUE_ENQUEUE')
   })
 
   it('keeps chair expiration idempotent', () => {
-    const startedState = rootReducer(buildInitialState(), {
+    const assignedState = {
+      ...buildInitialState(),
+      chairs: buildInitialState().chairs.map((chair) => {
+        if (chair.id !== chairId('chair-1')) return chair
+
+        return {
+          ...chair,
+          status: 'assigned' as const,
+          techId: techId('tech-1'),
+          customerName: 'Linh',
+          assignedAt: Date.now(),
+        }
+      }),
+    }
+
+    const startedState = rootReducer(assignedState, {
       type: 'CHAIR_STARTED',
       payload: {
         chairId: chairId('chair-1'),
         durationMs: 1000,
         source: 'manual',
+        techId: techId('tech-1'),
       },
     })
 
@@ -61,6 +77,41 @@ describe('rootReducer', () => {
 
     expect(finishedState.chairs[0].status).toBe('finished')
     expect(finishedAgain.chairs[0].completedAt).toBe(finishedState.chairs[0].completedAt)
+  })
+
+  it('resets a running chair', () => {
+    const startedState = rootReducer(buildInitialState(), {
+      type: 'CHAIR_STARTED',
+      payload: {
+        chairId: chairId('chair-1'),
+        durationMs: 1000,
+        source: 'manual',
+      },
+    })
+
+    const resetState = rootReducer(startedState, {
+      type: 'CHAIR_RESET',
+      payload: {
+        chairId: chairId('chair-1'),
+      },
+    })
+
+    expect(resetState.chairs[0].status).toBe('idle')
+    expect(resetState.chairs[0].techId).toBeNull()
+  })
+
+  it('blocks starting an unassigned chair', () => {
+    const nextState = rootReducer(buildInitialState(), {
+      type: 'CHAIR_STARTED',
+      payload: {
+        chairId: chairId('chair-1'),
+        durationMs: 1000,
+        source: 'manual',
+      },
+    })
+
+    expect(nextState.chairs[0].status).toBe('idle')
+    expect(nextState.meta.eventLog).toHaveLength(0)
   })
 
   it('builds a sample state independently', () => {

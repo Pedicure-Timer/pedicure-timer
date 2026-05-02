@@ -4,75 +4,75 @@
 
 @layer base {
   :root {
-    /* Neutral palette - Professional & Clean */
-    --background: 240 10% 98%;
-    --foreground: 240 10% 10%;
+    /* Warm, calm palette for a low-tech friendly salon UI */
+    --background: 42 40% 96%;
+    --foreground: 226 28% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
+    --card-foreground: 226 28% 16%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
+    --popover-foreground: 226 28% 16%;
 
-    /* Primary - Sophisticated Blue */
-    --primary: 221 83% 53%;
+    /* Primary - Teal blue with strong contrast */
+    --primary: 196 92% 31%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Warm Neutral */
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 6% 10%;
+    /* Secondary - Sand */
+    --secondary: 42 34% 91%;
+    --secondary-foreground: 226 22% 18%;
 
-    /* Muted - Subtle Gray */
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    /* Muted - Soft parchment */
+    --muted: 40 25% 94%;
+    --muted-foreground: 226 12% 44%;
 
-    /* Accent - Soft Purple */
-    --accent: 262 52% 47%;
+    /* Accent - Warm coral */
+    --accent: 16 76% 54%;
     --accent-foreground: 0 0% 100%;
 
-    /* Success - Natural Green */
-    --success: 142 71% 45%;
+    /* Success - Leaf green */
+    --success: 152 52% 36%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Warm Amber */
-    --warning: 38 92% 50%;
+    /* Warning - Soft amber */
+    --warning: 32 94% 49%;
     --warning-foreground: 0 0% 100%;
 
-    /* Destructive - Calm Red */
-    --destructive: 0 72% 51%;
+    /* Destructive - Tomato red */
+    --destructive: 0 74% 48%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders & Inputs */
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 221 83% 53%;
+    --border: 224 18% 88%;
+    --input: 224 18% 88%;
+    --ring: 196 92% 31%;
 
     /* Radius */
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 240 10% 8%;
-    --foreground: 240 5% 96%;
-    --card: 240 10% 10%;
-    --card-foreground: 240 5% 96%;
-    --popover: 240 10% 10%;
-    --popover-foreground: 240 5% 96%;
-    --primary: 221 83% 53%;
+    --background: 226 27% 10%;
+    --foreground: 40 35% 96%;
+    --card: 226 25% 13%;
+    --card-foreground: 40 35% 96%;
+    --popover: 226 25% 13%;
+    --popover-foreground: 40 35% 96%;
+    --primary: 196 92% 44%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 240 5% 96%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 64%;
-    --accent: 262 52% 47%;
+    --secondary: 226 20% 18%;
+    --secondary-foreground: 40 35% 96%;
+    --muted: 226 20% 18%;
+    --muted-foreground: 226 12% 68%;
+    --accent: 16 76% 54%;
     --accent-foreground: 0 0% 100%;
-    --success: 142 71% 45%;
+    --success: 152 52% 40%;
     --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 32 94% 54%;
     --warning-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 74% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 221 83% 53%;
+    --border: 226 18% 20%;
+    --input: 226 18% 20%;
+    --ring: 196 92% 44%;
   }
 }
 
@@ -81,11 +81,33 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(18, 123, 118, 0.10), transparent 34%),
+      radial-gradient(circle at top right, rgba(244, 114, 89, 0.08), transparent 30%),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(42 38% 97%) 100%);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.16);
+    color: hsl(var(--foreground));
   }
 
   /* Custom scrollbar */
@@ -115,9 +137,9 @@
 
   /* Glass effect */
   .glass {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   /* Subtle shadow */
@@ -127,7 +149,7 @@
 
   /* Elevated shadow */
   .shadow-elevated {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 14px 40px -24px rgba(20, 24, 40, 0.35);
   }
 
   /* Focus ring */

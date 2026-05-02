@@ -59,9 +59,60 @@ export const rootReducer = (state: AppState, action: AppAction): AppState => {
     case 'CHAIR_STARTED':
     case 'CHAIR_EXPIRED':
     case 'CHAIR_RESET': {
+      if (action.type === 'CHAIR_STARTED') {
+        const startedChair = state.chairs.find((chair) => chair.id === action.payload.chairId)
+        if (!startedChair || startedChair.status !== 'assigned' || !startedChair.customerName || !startedChair.techId) {
+          return state
+        }
+      }
+
+      const updatedChairs = chairReducer(state.chairs, action)
+
+      if (action.type === 'CHAIR_STARTED') {
+        const startedChair = state.chairs.find((chair) => chair.id === action.payload.chairId)
+        const techId = startedChair?.techId ?? action.payload.techId ?? null
+
+        return recordEvent({
+          ...state,
+          chairs: updatedChairs,
+          techs: techId
+            ? state.techs.map((tech) => {
+                if (tech.id !== techId) return tech
+                return {
+                  ...tech,
+                  status: 'busy',
+                  chairId: action.payload.chairId,
+                }
+              })
+            : state.techs,
+        }, action)
+      }
+
+      if (action.type === 'CHAIR_EXPIRED') {
+        const expiredChair = state.chairs.find((chair) => chair.id === action.payload.chairId)
+        const techId = expiredChair?.techId ?? null
+
+        return recordEvent({
+          ...state,
+          chairs: updatedChairs,
+          techs: techId
+            ? techReducer(state.techs, {
+                type: 'TECH_READY',
+                payload: { techId },
+              }).map((tech) => {
+                if (tech.id !== techId) return tech
+                return {
+                  ...tech,
+                  chairId: null,
+                }
+              })
+            : state.techs,
+        }, action)
+      }
+
       return recordEvent({
         ...state,
-        chairs: chairReducer(state.chairs, action),
+        chairs: updatedChairs,
       }, action)
     }
 
@@ -142,6 +193,7 @@ export const rootReducer = (state: AppState, action: AppAction): AppState => {
         { queue: state.queue, seqCounter: state.meta.queueSeqCounter },
         action
       )
+
       return recordEvent({
         ...state,
         queue: queueSlice.queue,
