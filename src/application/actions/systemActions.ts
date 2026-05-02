@@ -7,6 +7,10 @@ export interface HydrateAction {
   }
 }
 
+export interface LoadSampleStateAction {
+  type: 'LOAD_SAMPLE_STATE'
+}
+
 export interface ResetAllAction {
   type: 'RESET_ALL'
 }
@@ -25,4 +29,4 @@ export interface DemoModeSetAction {
   }
 }
 
-export type SystemAction = HydrateAction | ResetAllAction | SoundEnabledAction | DemoModeSetAction
+export type SystemAction = HydrateAction | LoadSampleStateAction | ResetAllAction | SoundEnabledAction | DemoModeSetAction

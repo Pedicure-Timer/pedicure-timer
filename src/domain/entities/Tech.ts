@@ -1,4 +1,4 @@
-import type { TechId } from '@/shared/types/branded'
+import type { ChairId, TechId } from '@/shared/types/branded'
 
 export type TechRole = 'mani'
 export type TechStatus = 'busy' | 'ready' | 'assigned'
@@ -9,6 +9,7 @@ export interface Tech {
   role: TechRole
   status: TechStatus
   readyAt: number | null
+  chairId: ChairId | null
 }
 
 export const isTechReady = (tech: Tech): boolean => tech.status === 'ready'

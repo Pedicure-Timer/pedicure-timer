@@ -6,6 +6,7 @@ import { ChairCard } from '@/presentation/components/chair/ChairCard'
 import { TechCard } from '@/presentation/components/tech/TechCard'
 import { QueuePanel } from '@/presentation/components/queue/QueuePanel'
 import { DemoControls } from '@/presentation/components/demo/DemoControls'
+import { EventLogPanel } from '@/presentation/components/demo/EventLogPanel'
 import { useLanguage } from '@/shared/i18n'
 import { Armchair, Users } from 'lucide-react'
 
@@ -63,6 +64,7 @@ export const DashboardPage: React.FC = () => {
           <aside className="space-y-6">
             <QueuePanel />
             <DemoControls />
+            <EventLogPanel />
 
             {/* Quick Guide */}
             <div className="rounded-xl border bg-card p-6 shadow-sm">

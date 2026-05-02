@@ -1,5 +1,23 @@
 # Kế Hoạch Chuẩn Cho Demo MVP Pedicure Timer Và Digital Queue
 
+## Checklist Trạng Thái
+
+1. Kết luận điều hành: đã xong.
+2. Phạm vi demo cốt lõi: đã xong.
+3. Kiến trúc kỹ thuật khuyến nghị: đã xong.
+4. Mô hình dữ liệu và máy trạng thái: đã xong.
+5. Luồng nghiệp vụ và quyết định sản phẩm: làm một phần.
+6. Thiết kế giao diện và trải nghiệm demo: đã xong.
+7. Lộ trình build, test và bàn giao: đã xong.
+8. Bản bàn giao: đã xong.
+
+Đã bổ sung trong code hiện tại:
+
+- Load sample state.
+- Event log / activity log.
+- Bộ test tự động cho checklist trong plan.
+- Cross-tab sync state bằng storage event.
+
 ## Kết Luận Điều Hành
 
 Bản demo nên được build như một single-page web app chạy hoàn toàn client-side, dùng React với một reducer trung tâm để tất cả sự kiện nghiệp vụ đi qua cùng một đường ống trạng thái: bật ghế, hết giờ, thêm vào queue, manicure bấm Ready, assign khách mới, reset chair, reset all, và hydrate sau refresh. Cách này phù hợp với bản MVP vì `useReducer` gom logic cập nhật state ra khỏi event handler, còn Vite cho vòng lặp dev nhanh và build ra static assets gọn để đưa lên một link share test nội bộ.

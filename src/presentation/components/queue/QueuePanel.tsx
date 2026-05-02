@@ -36,10 +36,6 @@ export const QueuePanel: React.FC = () => {
     if (!next || !readyTech) return
 
     dispatch({ type: 'QUEUE_ASSIGN_NEXT' })
-    dispatch({
-      type: 'TECH_ASSIGNED',
-      payload: { techId: readyTech.id },
-    })
   }
 
   return (

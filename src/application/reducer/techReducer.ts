@@ -18,13 +18,14 @@ export const techReducer = (techs: Tech[], action: TechAction): Tech[] => {
     }
 
     case 'TECH_ASSIGNED': {
-      const { techId } = action.payload
+      const { techId, chairId } = action.payload
       return techs.map((tech) => {
         if (tech.id !== techId) return tech
         return {
           ...tech,
           status: 'assigned',
           readyAt: null,
+          chairId: chairId ?? tech.chairId,
         }
       })
     }
@@ -37,6 +38,7 @@ export const techReducer = (techs: Tech[], action: TechAction): Tech[] => {
           ...tech,
           status: 'busy',
           readyAt: null,
+          chairId: null,
         }
       })
     }

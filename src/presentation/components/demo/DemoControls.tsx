@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/presentation/components/ui/alert-dialog'
-import { RotateCcw, Settings, Zap, AlertTriangle } from 'lucide-react'
+import { RotateCcw, Settings, Zap, AlertTriangle, Layers3 } from 'lucide-react'
 
 export const DemoControls: React.FC = () => {
   const { settings } = useAppState()
@@ -31,6 +31,10 @@ export const DemoControls: React.FC = () => {
 
   const handleResetAll = () => {
     dispatch({ type: 'RESET_ALL' })
+  }
+
+  const handleLoadSampleState = () => {
+    dispatch({ type: 'LOAD_SAMPLE_STATE' })
   }
 
   return (
@@ -90,6 +94,11 @@ export const DemoControls: React.FC = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <Button variant="secondary" className="w-full h-10 shadow-sm" onClick={handleLoadSampleState}>
+          <Layers3 className="w-4 h-4 mr-2" />
+          {t.loadSampleState}
+        </Button>
       </CardContent>
     </Card>
   )

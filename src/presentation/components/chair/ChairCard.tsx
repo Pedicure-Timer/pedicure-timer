@@ -50,6 +50,12 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
       cardClass: 'border-border hover:border-muted-foreground/20',
       timerClass: 'text-muted-foreground',
     },
+    assigned: {
+      badge: 'outline' as const,
+      label: t.assigned,
+      cardClass: 'border-accent/30 bg-accent/[0.02] hover:border-accent/50',
+      timerClass: 'text-accent',
+    },
     running: {
       badge: 'default' as const,
       label: t.running,
@@ -95,17 +101,17 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
               "text-5xl font-bold tabular-nums tracking-tight",
               statusConfig.timerClass
             )}>
-              {chair.status === 'idle' ? '--:--' : formatCountdown(remainingMs)}
+              {chair.status === 'running' ? formatCountdown(remainingMs) : '--:--'}
             </div>
             <div className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {chair.status === 'idle' ? t.ready : t.remaining}
+              {chair.status === 'running' ? t.remaining : chair.status === 'assigned' ? t.assigned : t.ready}
             </div>
           </div>
         </div>
 
         {/* Actions */}
         <div className="space-y-3">
-          {chair.status === 'idle' && (
+          {(chair.status === 'idle' || chair.status === 'assigned') && (
             <Button
               onClick={handleStart}
               className="w-full h-11 shadow-sm"
@@ -115,7 +121,7 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
               {t.start}
             </Button>
           )}
-          {chair.status !== 'idle' && (
+          {(chair.status === 'running' || chair.status === 'finished') && (
             <Button
               onClick={handleReset}
               variant="outline"
@@ -127,6 +133,15 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
             </Button>
           )}
         </div>
+
+        {chair.customerName && (
+          <div className="mt-4 rounded-lg border bg-muted/30 px-3 py-2 text-sm">
+            <div className="text-xs uppercase tracking-wider text-muted-foreground">
+              {t.customer}
+            </div>
+            <p className="mt-1 font-medium">{chair.customerName}</p>
+          </div>
+        )}
 
         {/* Technician Info */}
         {chair.techId && (

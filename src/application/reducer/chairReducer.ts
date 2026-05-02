@@ -8,12 +8,13 @@ export const chairReducer = (chairs: Chair[], action: ChairAction): Chair[] => {
       const { chairId, durationMs, techId } = action.payload
       return chairs.map((chair) => {
         if (chair.id !== chairId) return chair
-        if (chair.status !== 'idle') return chair
+        if (chair.status !== 'idle' && chair.status !== 'assigned') return chair
         const now = nowMs()
         return {
           ...chair,
           status: 'running',
           techId: techId ?? null,
+          assignedAt: chair.assignedAt ?? now,
           startedAt: now,
           endsAt: now + durationMs,
           completedAt: null,
@@ -46,6 +47,8 @@ export const chairReducer = (chairs: Chair[], action: ChairAction): Chair[] => {
           ...chair,
           status: 'idle',
           techId: null,
+          customerName: null,
+          assignedAt: null,
           startedAt: null,
           endsAt: null,
           completedAt: null,

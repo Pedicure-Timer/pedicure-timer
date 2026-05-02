@@ -3,6 +3,7 @@ import { AppProvider } from './presentation/context/AppContext'
 import { useAppState, useAppDispatch } from './presentation/context/useAppDispatch'
 import { usePersistence } from './presentation/hooks/usePersistence'
 import { useHydration } from './presentation/hooks/useHydration'
+import { useStorageSync } from './presentation/hooks/useStorageSync'
 import { useSound } from './presentation/hooks/useSound'
 import { DashboardPage } from './presentation/pages/DashboardPage'
 import { shouldTransitionToFinished } from './domain/rules/chairRules'
@@ -16,6 +17,7 @@ const AppContent: React.FC = () => {
 
   usePersistence(state)
   useHydration(dispatch)
+  useStorageSync(dispatch)
 
   useEffect(() => {
     const interval = setInterval(() => {

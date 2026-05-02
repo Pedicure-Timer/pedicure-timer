@@ -8,6 +8,7 @@ export interface Translations {
 
   // Chair Card
   chair: string
+  customer: string
   idle: string
   running: string
   finished: string
@@ -39,6 +40,11 @@ export interface Translations {
   demoModeDesc: string
   resetAll: string
   resetConfirm: string
+  loadSampleState: string
+
+  // Event Log
+  eventLogTitle: string
+  eventLogEmpty: string
 
   // Sound Banner
   soundBannerText: string
@@ -60,6 +66,7 @@ export const translations: Record<Language, Translations> = {
     queue: 'Queue',
 
     chair: 'Chair',
+    customer: 'Customer',
     idle: 'Idle',
     running: 'Running',
     finished: 'Finished',
@@ -88,6 +95,10 @@ export const translations: Record<Language, Translations> = {
     demoModeDesc: '40s/70s timers',
     resetAll: 'Reset All',
     resetConfirm: 'Reset all chairs, techs, and queue?',
+    loadSampleState: 'Load Sample State',
+
+    eventLogTitle: 'Activity Log',
+    eventLogEmpty: 'Actions will appear here as the demo runs.',
 
     soundBannerText: 'Enable sound to hear alerts when timers finish',
     enableSound: 'Enable Sound',
@@ -109,6 +120,7 @@ export const translations: Record<Language, Translations> = {
     queue: 'Hàng Đợi',
 
     chair: 'Ghế',
+    customer: 'Khách',
     idle: 'Rảnh',
     running: 'Đang Chạy',
     finished: 'Hoàn Thành',
@@ -137,6 +149,10 @@ export const translations: Record<Language, Translations> = {
     demoModeDesc: 'Hẹn giờ 40s/70s',
     resetAll: 'Đặt Lại Tất Cả',
     resetConfirm: 'Đặt lại tất cả ghế, nhân viên và hàng đợi?',
+    loadSampleState: 'Tải Dữ Liệu Mẫu',
+
+    eventLogTitle: 'Nhật Ký Hoạt Động',
+    eventLogEmpty: 'Các thao tác sẽ xuất hiện ở đây khi demo chạy.',
 
     soundBannerText: 'Bật âm thanh để nghe thông báo khi hết giờ',
     enableSound: 'Bật Âm Thanh',

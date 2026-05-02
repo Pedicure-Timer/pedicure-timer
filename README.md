@@ -224,6 +224,7 @@ All touch targets are minimum 44x44px for mobile usability.
 
 ## 📚 Documentation
 
+- [HANDOVER.md](./HANDOVER.md) - Short handoff guide for salon owners
 - [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) - Complete design system documentation
 - [USER_GUIDE.md](./USER_GUIDE.md) - Detailed user instructions
 - [SHADCN_MIGRATION.md](./SHADCN_MIGRATION.md) - shadcn/ui migration notes

@@ -66,6 +66,12 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
           </Badge>
         </div>
 
+        {tech.chairId && (
+          <div className="mb-3 rounded-lg border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
+            {t.chair}: <span className="font-medium text-foreground">{tech.chairId}</span>
+          </div>
+        )}
+
         {tech.status === 'busy' && (
           <Button
             onClick={handleReady}
