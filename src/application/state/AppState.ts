@@ -20,6 +20,7 @@ export interface EventLogEntry {
 export interface AppSettings {
   demoMode: boolean
   soundEnabled: boolean
+  toastEnabled: boolean
 }
 
 export interface AppMeta {

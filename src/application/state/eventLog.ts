@@ -15,7 +15,7 @@ export const createEventLogEntry = (action: AppAction): EventLogEntry | null => 
             ? ({ kind: 'tech', techId: action.payload.techId } as EventLogDetail)
             : action.type === 'QUEUE_ENQUEUE'
               ? ({ kind: 'customer', customerName: action.payload.customerName } as EventLogDetail)
-              : action.type === 'DEMO_MODE_SET' || action.type === 'SOUND_ENABLED'
+              : action.type === 'DEMO_MODE_SET' || action.type === 'SOUND_ENABLED' || action.type === 'TOAST_ENABLED'
                 ? ({ kind: 'state', enabled: action.payload.enabled } as EventLogDetail)
                 : undefined
 

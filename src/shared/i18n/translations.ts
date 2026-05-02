@@ -7,10 +7,25 @@ export interface Translations {
   topBarDescription: string
   activeChairs: string
   queue: string
+  resetAudioPrompt: string
 
   // Language
   languageEnglish: string
   languageVietnamese: string
+
+  // Sound
+  soundOn: string
+  soundOff: string
+  soundToggleOn: string
+  soundToggleOff: string
+
+  // Toast
+  toastOn: string
+  toastOff: string
+  toastToggleOn: string
+  toastToggleOff: string
+  mandatoryToastBadge: string
+  temporaryToastBadge: string
 
   // Dashboard
   dashboardHeroBadge: string
@@ -37,6 +52,13 @@ export interface Translations {
   startRequiresAssignment: string
   chairReadyHint: string
   chairWaitingHint: string
+
+  // Chair Toast
+  chairStartedToastTitle: string
+  chairFinishedToastTitle: string
+  chairStartedToastMessage: (chairNumber: string) => string
+  chairFinishedToastMessage: (chairNumber: string) => string
+  chairToastDismiss: string
 
   // Tech Card
   busy: string
@@ -91,6 +113,7 @@ export interface Translations {
   eventLogResetAllState: string
   eventLogDemoModeChanged: string
   eventLogSoundSettingChanged: string
+  eventLogToastSettingChanged: string
   eventLogSampleStateLoaded: string
   eventLogChairDetail: (chairId: string) => string
   eventLogCompletionTokenDetail: (completionToken: string) => string
@@ -125,9 +148,22 @@ export const translations: Record<Language, Translations> = {
     topBarDescription: 'A simple operations screen for salon owners: chairs, techs, queue, and live status in one place.',
     activeChairs: 'Active Chairs',
     queue: 'Queue',
+    resetAudioPrompt: 'Reset audio permission prompt',
 
     languageEnglish: 'English',
     languageVietnamese: 'Vietnamese',
+
+    soundOn: 'Sound On',
+    soundOff: 'Sound Off',
+    soundToggleOn: 'Turn sound on',
+    soundToggleOff: 'Turn sound off',
+
+    toastOn: 'Toasts On',
+    toastOff: 'Toasts Off',
+    toastToggleOn: 'Turn toasts on',
+    toastToggleOff: 'Turn toasts off',
+    mandatoryToastBadge: 'Required alert',
+    temporaryToastBadge: 'Temporary notice',
 
     dashboardHeroBadge: 'Salon operations screen',
     dashboardHeroTitle: 'Track chairs, technicians, and the queue in one view.',
@@ -152,6 +188,11 @@ export const translations: Record<Language, Translations> = {
     startRequiresAssignment: 'Assign a customer and tech before starting.',
     chairReadyHint: 'Ready to start',
     chairWaitingHint: 'Waiting for a customer and technician',
+    chairStartedToastTitle: 'Chair started',
+    chairFinishedToastTitle: 'Chair finished',
+    chairStartedToastMessage: (chairNumber) => `Chair ${chairNumber} has started.`,
+    chairFinishedToastMessage: (chairNumber) => `Chair ${chairNumber} has finished.`,
+    chairToastDismiss: 'Tap to dismiss',
 
     busy: 'Busy',
     ready: 'Ready',
@@ -202,6 +243,7 @@ export const translations: Record<Language, Translations> = {
     eventLogResetAllState: 'Reset all state',
     eventLogDemoModeChanged: 'Demo mode changed',
     eventLogSoundSettingChanged: 'Sound setting changed',
+    eventLogToastSettingChanged: 'Toast setting changed',
     eventLogSampleStateLoaded: 'Sample state loaded',
     eventLogChairDetail: (chairId) => `Chair ${chairId}`,
     eventLogCompletionTokenDetail: (completionToken) => `Completion token ${completionToken}`,
@@ -235,9 +277,22 @@ export const translations: Record<Language, Translations> = {
     topBarDescription: 'Màn hình vận hành đơn giản cho chủ salon: ghế, thợ, hàng đợi và trạng thái chạy theo thời gian thực.',
     activeChairs: 'Ghế Đang Dùng',
     queue: 'Hàng Đợi',
+    resetAudioPrompt: 'Đặt lại hỏi quyền âm thanh',
 
     languageEnglish: 'Tiếng Anh',
     languageVietnamese: 'Tiếng Việt',
+
+    soundOn: 'Âm Thanh Bật',
+    soundOff: 'Âm Thanh Tắt',
+    soundToggleOn: 'Bật âm thanh',
+    soundToggleOff: 'Tắt âm thanh',
+
+    toastOn: 'Toast Bật',
+    toastOff: 'Toast Tắt',
+    toastToggleOn: 'Bật hiển thị toast',
+    toastToggleOff: 'Tắt hiển thị toast',
+    mandatoryToastBadge: 'Cảnh báo bắt buộc',
+    temporaryToastBadge: 'Thông báo tạm thời',
 
     dashboardHeroBadge: 'Màn hình vận hành salon',
     dashboardHeroTitle: 'Theo dõi ghế, thợ và hàng đợi trong một màn hình.',
@@ -262,6 +317,11 @@ export const translations: Record<Language, Translations> = {
     startRequiresAssignment: 'Cần gán khách và nhân viên trước khi bắt đầu.',
     chairReadyHint: 'Sẵn sàng để bắt đầu',
     chairWaitingHint: 'Đang chờ khách và nhân viên được gán',
+    chairStartedToastTitle: 'Ghế đã bắt đầu',
+    chairFinishedToastTitle: 'Ghế đã kết thúc',
+    chairStartedToastMessage: (chairNumber) => `Ghế ${chairNumber} đã bắt đầu.`,
+    chairFinishedToastMessage: (chairNumber) => `Ghế ${chairNumber} đã kết thúc.`,
+    chairToastDismiss: 'Nhấn để tắt',
 
     busy: 'Đang phục vụ',
     ready: 'Sẵn Sàng',
@@ -312,6 +372,7 @@ export const translations: Record<Language, Translations> = {
     eventLogResetAllState: 'Đặt lại toàn bộ trạng thái',
     eventLogDemoModeChanged: 'Đã đổi chế độ demo',
     eventLogSoundSettingChanged: 'Đã đổi cài đặt âm thanh',
+    eventLogToastSettingChanged: 'Đã đổi cài đặt toast',
     eventLogSampleStateLoaded: 'Đã tải trạng thái mẫu',
     eventLogChairDetail: (chairId) => `Ghế ${chairId}`,
     eventLogCompletionTokenDetail: (completionToken) => `Mã hoàn tất ${completionToken}`,

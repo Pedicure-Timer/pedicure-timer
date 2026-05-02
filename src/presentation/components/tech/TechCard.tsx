@@ -17,13 +17,6 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
   const { t } = useLanguage()
   const canMarkReady = tech.status === 'busy' && !tech.chairId
 
-  const statusDetails =
-    tech.status === 'assigned'
-      ? t.assignedHint
-      : tech.status === 'busy' && tech.chairId
-        ? t.busyHint
-        : t.readyHint
-
   const handleReady = () => {
     dispatch({
       type: 'TECH_READY',

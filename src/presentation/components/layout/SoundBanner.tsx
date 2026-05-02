@@ -1,32 +1,36 @@
-import React from 'react'
-import { useAppState, useAppDispatch } from '@/presentation/context/useAppDispatch'
+import React, { useState } from 'react'
+import { useAppDispatch, useAppState } from '@/presentation/context/useAppDispatch'
 import { useSound } from '@/presentation/hooks/useSound'
+import { readStoredSoundConsentAsked } from '@/presentation/hooks/uiPreferences'
 import { useLanguage } from '@/shared/i18n'
 import { Button } from '@/presentation/components/ui/button'
-import { Volume2, X, BellRing } from 'lucide-react'
+import { BellRing, Volume2, X } from 'lucide-react'
 
 export const SoundBanner: React.FC = () => {
   const { settings } = useAppState()
   const dispatch = useAppDispatch()
-  const { enable } = useSound()
+  const { setSoundEnabledPreference } = useSound()
   const { t } = useLanguage()
+  const [hidden, setHidden] = useState(false)
+
+  const alreadyAsked = readStoredSoundConsentAsked()
 
   const handleEnable = async () => {
-    await enable()
-    dispatch({
-      type: 'SOUND_ENABLED',
-      payload: { enabled: true },
+    await setSoundEnabledPreference(true, dispatch, {
+      markConsent: true,
+      preview: true,
     })
   }
 
-  const handleDismiss = () => {
-    dispatch({
-      type: 'SOUND_ENABLED',
-      payload: { enabled: true },
+  const handleDismiss = async () => {
+    await setSoundEnabledPreference(false, dispatch, {
+      markConsent: true,
+      preview: false,
     })
+    setHidden(true)
   }
 
-  if (settings.soundEnabled) return null
+  if (alreadyAsked || hidden || settings.soundEnabled) return null
 
   return (
     <div className="border-b border-warning/20 bg-warning/10">

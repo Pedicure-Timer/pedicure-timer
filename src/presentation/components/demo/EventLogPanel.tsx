@@ -33,6 +33,8 @@ const getEventLogLabel = (type: string, t: Translations) => {
       return t.eventLogDemoModeChanged
     case 'SOUND_ENABLED':
       return t.eventLogSoundSettingChanged
+    case 'TOAST_ENABLED':
+      return t.eventLogToastSettingChanged
     case 'LOAD_SAMPLE_STATE':
       return t.eventLogSampleStateLoaded
     default:
@@ -90,7 +92,6 @@ export const EventLogPanel: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 flex flex-col flex-1 min-h-0">
-        {/* Search Input */}
         <div className="relative flex-shrink-0">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <input
@@ -114,8 +115,7 @@ export const EventLogPanel: React.FC = () => {
           )}
         </div>
 
-        {/* Scrollable Log Area */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 max-h-[500px] overflow-y-auto">
           {meta.eventLog.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-border/70 bg-muted/20 p-4 text-sm text-muted-foreground leading-6">
               {t.eventLogEmpty}

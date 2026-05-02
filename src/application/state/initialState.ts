@@ -19,6 +19,7 @@ export const buildInitialState = (): AppState => ({
   settings: {
     demoMode: true,
     soundEnabled: false,
+    toastEnabled: true,
   },
   meta: {
     queueSeqCounter: 0,

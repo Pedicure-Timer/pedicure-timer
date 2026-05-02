@@ -22,6 +22,13 @@ export interface SoundEnabledAction {
   }
 }
 
+export interface ToastEnabledAction {
+  type: 'TOAST_ENABLED'
+  payload: {
+    enabled: boolean
+  }
+}
+
 export interface DemoModeSetAction {
   type: 'DEMO_MODE_SET'
   payload: {
@@ -29,4 +36,4 @@ export interface DemoModeSetAction {
   }
 }
 
-export type SystemAction = HydrateAction | LoadSampleStateAction | ResetAllAction | SoundEnabledAction | DemoModeSetAction
+export type SystemAction = HydrateAction | LoadSampleStateAction | ResetAllAction | SoundEnabledAction | ToastEnabledAction | DemoModeSetAction

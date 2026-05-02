@@ -46,6 +46,16 @@ export const rootReducer = (state: AppState, action: AppAction): AppState => {
       }, action)
     }
 
+    case 'TOAST_ENABLED': {
+      return recordEvent({
+        ...state,
+        settings: {
+          ...state.settings,
+          toastEnabled: action.payload.enabled,
+        },
+      }, action)
+    }
+
     case 'DEMO_MODE_SET': {
       return recordEvent({
         ...state,
