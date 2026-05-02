@@ -87,28 +87,28 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
         </div>
 
         <div className="mb-3 rounded-2xl border border-border/70 bg-muted/20 px-4 py-3">
-          <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
-            <div className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-xl bg-muted ring-1 ring-border/60",
-              tech.status === 'ready' && 'bg-success/10 text-success',
-              tech.status === 'assigned' && 'bg-accent/10 text-accent',
-              tech.status === 'busy' && 'bg-muted text-muted-foreground'
-            )}>
-              <User className="h-3.5 w-3.5" />
+          {tech.chairId ? (
+            <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+              <div className={cn(
+                "flex h-7 w-7 items-center justify-center rounded-xl bg-muted ring-1 ring-border/60",
+                tech.status === 'ready' && 'bg-success/10 text-success',
+                tech.status === 'assigned' && 'bg-accent/10 text-accent',
+                tech.status === 'busy' && 'bg-muted text-muted-foreground'
+              )}>
+                <User className="h-3.5 w-3.5" />
+              </div>
+              <span>{t.chair}:</span>
+              <span className="font-medium text-foreground">{tech.chairId}</span>
             </div>
-            <span>{statusConfig.label}</span>
-          </div>
-          <div className="mt-2 text-xs leading-6 text-muted-foreground">
-            {statusDetails}
-          </div>
-          {tech.chairId && (
-            <div className="mt-2 text-xs text-foreground/80">
-              {t.chair}: <span className="font-medium text-foreground">{tech.chairId}</span>
+          ) : (
+            <div className="text-xs text-muted-foreground">
+              {tech.status === 'ready' && t.readyHint}
+              {tech.status === 'assigned' && t.assignedHint}
             </div>
           )}
         </div>
 
-        {canMarkReady ? (
+        {canMarkReady && (
           <Button
             onClick={handleReady}
             variant="outline"
@@ -118,11 +118,7 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
             <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
             {t.imReady}
           </Button>
-        ) : tech.status === 'busy' && tech.chairId ? (
-          <div className="mt-2 rounded-2xl border border-border/70 bg-muted/20 px-4 py-3 text-xs leading-6 text-muted-foreground">
-            {t.busyHint}
-          </div>
-        ) : null}
+        )}
       </CardContent>
     </Card>
   )

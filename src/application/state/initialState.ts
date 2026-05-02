@@ -10,10 +10,10 @@ export const buildInitialState = (): AppState => ({
     { id: chairId('chair-4'), status: 'idle', serviceType: 'pedi', techId: null, customerName: null, assignedAt: null, startedAt: null, endsAt: null, completedAt: null, lastCompletionToken: null },
   ],
   techs: [
-    { id: techId('tech-1'), name: 'Lan', role: 'mani', status: 'busy', readyAt: null, chairId: null },
-    { id: techId('tech-2'), name: 'Mai', role: 'mani', status: 'busy', readyAt: null, chairId: null },
-    { id: techId('tech-3'), name: 'Hoa', role: 'mani', status: 'busy', readyAt: null, chairId: null },
-    { id: techId('tech-4'), name: 'Ngọc', role: 'mani', status: 'busy', readyAt: null, chairId: null },
+    { id: techId('tech-1'), name: 'Lan', role: 'mani', status: 'ready', readyAt: null, chairId: null },
+    { id: techId('tech-2'), name: 'Mai', role: 'mani', status: 'ready', readyAt: null, chairId: null },
+    { id: techId('tech-3'), name: 'Hoa', role: 'mani', status: 'ready', readyAt: null, chairId: null },
+    { id: techId('tech-4'), name: 'Ngọc', role: 'mani', status: 'ready', readyAt: null, chairId: null },
   ],
   queue: [],
   settings: {

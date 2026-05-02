@@ -194,12 +194,6 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
           </div>
         )}
 
-        {chair.status === 'assigned' && chair.techId && (
-          <div className="mt-3 rounded-2xl border border-accent/20 bg-accent/[0.06] px-4 py-3 text-xs text-foreground">
-            {t.assignedChairHint}
-          </div>
-        )}
-
         {/* Technician Info */}
         {chair.techId && (
           <div className="mt-4 pt-4 border-t border-border/70 flex items-center gap-2 text-sm">
