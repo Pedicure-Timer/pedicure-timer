@@ -15,6 +15,14 @@ interface TechCardProps {
 export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
   const dispatch = useAppDispatch()
   const { t } = useLanguage()
+  const canMarkReady = tech.status === 'busy' && !tech.chairId
+
+  const statusDetails =
+    tech.status === 'assigned'
+      ? t.assignedHint
+      : tech.status === 'busy' && tech.chairId
+        ? t.busyHint
+        : t.readyHint
 
   const handleReady = () => {
     dispatch({
@@ -78,17 +86,29 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
           </Badge>
         </div>
 
-        {tech.chairId && (
-          <div className="mb-3 rounded-2xl border border-border/70 bg-muted/25 px-4 py-3 text-xs text-muted-foreground">
-            {t.chair}: <span className="font-medium text-foreground">{tech.chairId}</span>
+        <div className="mb-3 rounded-2xl border border-border/70 bg-muted/20 px-4 py-3">
+          <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+            <div className={cn(
+              "flex h-7 w-7 items-center justify-center rounded-xl bg-muted ring-1 ring-border/60",
+              tech.status === 'ready' && 'bg-success/10 text-success',
+              tech.status === 'assigned' && 'bg-accent/10 text-accent',
+              tech.status === 'busy' && 'bg-muted text-muted-foreground'
+            )}>
+              <User className="h-3.5 w-3.5" />
+            </div>
+            <span>{statusConfig.label}</span>
           </div>
-        )}
-
-        <div className="mb-3 text-xs leading-6 text-muted-foreground">
-          {statusConfig.helper}
+          <div className="mt-2 text-xs leading-6 text-muted-foreground">
+            {statusDetails}
+          </div>
+          {tech.chairId && (
+            <div className="mt-2 text-xs text-foreground/80">
+              {t.chair}: <span className="font-medium text-foreground">{tech.chairId}</span>
+            </div>
+          )}
         </div>
 
-        {tech.status === 'busy' && (
+        {canMarkReady ? (
           <Button
             onClick={handleReady}
             variant="outline"
@@ -98,7 +118,11 @@ export const TechCard: React.FC<TechCardProps> = ({ tech }) => {
             <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
             {t.imReady}
           </Button>
-        )}
+        ) : tech.status === 'busy' && tech.chairId ? (
+          <div className="mt-2 rounded-2xl border border-border/70 bg-muted/20 px-4 py-3 text-xs leading-6 text-muted-foreground">
+            {t.busyHint}
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   )

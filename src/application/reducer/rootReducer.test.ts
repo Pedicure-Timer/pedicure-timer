@@ -114,6 +114,29 @@ describe('rootReducer', () => {
     expect(nextState.meta.eventLog).toHaveLength(0)
   })
 
+  it('blocks marking a tech ready while still attached to a chair', () => {
+    const state = buildInitialState()
+    const nextState = rootReducer({
+      ...state,
+      techs: state.techs.map((tech) => {
+        if (tech.id !== state.techs[0].id) return tech
+        return {
+          ...tech,
+          status: 'busy',
+          chairId: chairId('chair-1'),
+        }
+      }),
+    }, {
+      type: 'TECH_READY',
+      payload: {
+        techId: state.techs[0].id,
+      },
+    })
+
+    expect(nextState.techs[0].status).toBe('busy')
+    expect(nextState.techs[0].chairId).toBe(chairId('chair-1'))
+  })
+
   it('builds a sample state independently', () => {
     const sample = buildSampleState()
 

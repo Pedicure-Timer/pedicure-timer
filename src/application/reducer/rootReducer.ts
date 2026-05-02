@@ -96,13 +96,12 @@ export const rootReducer = (state: AppState, action: AppAction): AppState => {
           ...state,
           chairs: updatedChairs,
           techs: techId
-            ? techReducer(state.techs, {
-                type: 'TECH_READY',
-                payload: { techId },
-              }).map((tech) => {
+            ? state.techs.map((tech) => {
                 if (tech.id !== techId) return tech
                 return {
                   ...tech,
+                  status: 'ready',
+                  readyAt: nowMs(),
                   chairId: null,
                 }
               })

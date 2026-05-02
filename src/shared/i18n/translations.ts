@@ -35,6 +35,8 @@ export interface Translations {
   remaining: string
   technician: string
   startRequiresAssignment: string
+  chairReadyHint: string
+  chairWaitingHint: string
 
   // Tech Card
   busy: string
@@ -148,6 +150,8 @@ export const translations: Record<Language, Translations> = {
     remaining: 'Remaining',
     technician: 'Technician',
     startRequiresAssignment: 'Assign a customer and tech before starting.',
+    chairReadyHint: 'Ready to start',
+    chairWaitingHint: 'Waiting for a customer and technician',
 
     busy: 'Busy',
     ready: 'Ready',
@@ -256,6 +260,8 @@ export const translations: Record<Language, Translations> = {
     remaining: 'Còn Lại',
     technician: 'Nhân Viên',
     startRequiresAssignment: 'Cần gán khách và nhân viên trước khi bắt đầu.',
+    chairReadyHint: 'Sẵn sàng để bắt đầu',
+    chairWaitingHint: 'Đang chờ khách và nhân viên được gán',
 
     busy: 'Đang phục vụ',
     ready: 'Sẵn Sàng',

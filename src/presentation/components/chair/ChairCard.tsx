@@ -21,6 +21,7 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
   const { remainingMs } = useCountdown(chair.endsAt)
   const { t } = useLanguage()
   const canStart = chair.status === 'assigned' && Boolean(chair.customerName) && Boolean(chair.techId)
+  const isRunning = chair.status === 'running'
 
   const handleStart = () => {
     const durationMs = settings.demoMode
@@ -106,23 +107,52 @@ export const ChairCard: React.FC<ChairCardProps> = ({ chair }) => {
         </div>
 
         {/* Timer Display */}
-        <div className="mb-6 rounded-3xl bg-muted/35 p-5 sm:p-6 border border-border/70">
-          <div className="flex flex-col items-center justify-center">
-            <Clock className={cn("h-8 w-8 mb-3", statusConfig.timerClass)} />
-            <div className={cn(
-              "text-4xl sm:text-5xl font-extrabold tabular-nums tracking-tight",
-              statusConfig.timerClass
-            )}>
-              {chair.status === 'running' ? formatCountdown(remainingMs) : '--:--'}
+        <div className={cn(
+          'mb-6 rounded-3xl border p-5 sm:p-6 transition-colors',
+          isRunning
+            ? 'border-primary/25 bg-primary/[0.03]'
+            : chair.status === 'assigned'
+              ? 'border-accent/25 bg-accent/[0.03]'
+              : 'border-border/70 bg-muted/20'
+        )}>
+          {isRunning ? (
+            <div className="flex flex-col items-center justify-center text-center">
+              <Clock className={cn('h-7 w-7 mb-3', statusConfig.timerClass)} />
+              <div className={cn(
+                'text-4xl sm:text-5xl font-extrabold tabular-nums tracking-tight',
+                statusConfig.timerClass
+              )}>
+                {formatCountdown(remainingMs)}
+              </div>
+              <div className="mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                {t.remaining}
+              </div>
             </div>
-            <div className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-              {chair.status === 'running'
-                ? t.remaining
-                : chair.status === 'assigned'
-                  ? t.assigned
-                  : t.ready}
+          ) : chair.status === 'assigned' ? (
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-accent/10 text-accent ring-1 ring-accent/15">
+                <Clock className="h-6 w-6" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-foreground">{t.assigned}</div>
+                <div className="mt-1 text-xs leading-6 text-muted-foreground">
+                  {chair.customerName ? chair.customerName : t.chairWaitingHint}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-muted/70 text-muted-foreground ring-1 ring-border/60">
+                <Clock className="h-6 w-6" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-foreground">{t.chairReadyHint}</div>
+                <div className="mt-1 text-xs leading-6 text-muted-foreground">
+                  {t.chairWaitingHint}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Actions */}

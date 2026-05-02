@@ -8,6 +8,7 @@ export const techReducer = (techs: Tech[], action: TechAction): Tech[] => {
       const { techId } = action.payload
       return techs.map((tech) => {
         if (tech.id !== techId) return tech
+        if (tech.chairId) return tech
         if (tech.status === 'ready') return tech
         return {
           ...tech,
